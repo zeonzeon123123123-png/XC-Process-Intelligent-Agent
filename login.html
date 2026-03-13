@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 研发工作流程智能体</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .auth-header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .auth-switch a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border: 1px solid #fcc;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border: 1px solid #cfc;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录页面 -->
+    <div id="loginPage" class="auth-container">
+        <div class="auth-header">
+            <div class="logo">🚀</div>
+            <h1>智能体配置中心</h1>
+            <p>欢迎回来，请登录您的账号</p>
+        </div>
+        <div id="loginError" class="error-message"></div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" id="loginUsername" required placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" id="loginPassword" required placeholder="请输入密码">
+            </div>
+            <button type="submit" class="btn">登录</button>
+        </form>
+        <div class="auth-switch">
+            还没有账号？<a onclick="showRegister()">立即注册</a>
+        </div>
+    </div>
+
+    <!-- 注册页面 -->
+    <div id="registerPage" class="auth-container hidden">
+        <div class="auth-header">
+            <div class="logo">🎉</div>
+            <h1>创建账号</h1>
+            <p>填写以下信息完成注册</p>
+        </div>
+        <div id="registerError" class="error-message"></div>
+        <div id="registerSuccess" class="success-message"></div>
+        <form id="registerForm">
+            <div class="form-group">
+                <label>用户名 *</label>
+                <input type="text" id="regUsername" required placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <label>密码 *</label>
+                <input type="password" id="regPassword" required placeholder="请设置密码（至少 6 位）" minlength="6">
+            </div>
+            <div class="form-group">
+                <label>确认密码 *</label>
+                <input type="password" id="regPasswordConfirm" required placeholder="请再次输入密码">
+            </div>
+            <div class="form-group">
+                <label>所在部门 *</label>
+                <select id="regDepartment" required>
+                    <option value="">请选择部门</option>
+                    <option value="管理层">管理层</option>
+                    <option value="项目部">项目部</option>
+                    <option value="产品部">产品部</option>
+                    <option value="软件部">软件部</option>
+                    <option value="硬件部">硬件部</option>
+                    <option value="结构部">结构部</option>
+                    <option value="测试部">测试部</option>
+                    <option value="商务部">商务部</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>职务 *</label>
+                <input type="text" id="regPosition" required placeholder="请输入职务">
+            </div>
+            <div class="form-group">
+                <label>邮箱</label>
+                <input type="email" id="regEmail" placeholder="请输入邮箱">
+            </div>
+            <div class="form-group">
+                <label>手机号</label>
+                <input type="tel" id="regPhone" placeholder="请输入手机号">
+            </div>
+            <button type="submit" class="btn">注册</button>
+        </form>
+        <div class="auth-switch">
+            已有账号？<a onclick="showLogin()">返回登录</a>
+        </div>
+    </div>
+
+    <script>
+        // 数据存储
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'Admin@2026';
+
+        // 初始化数据
+        function initData() {
+            if (!localStorage.getItem('users')) {
+                localStorage.setItem('users', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('departments')) {
+                const departments = [
+                    { name: '管理层', members: [] },
+                    { name: '项目部', members: [] },
+                    { name: '产品部', members: [] },
+                    { name: '软件部', members: [] },
+                    { name: '硬件部', members: [] },
+                    { name: '结构部', members: [] },
+                    { name: '测试部', members: [] },
+                    { name: '商务部', members: [] }
+                ];
+                localStorage.setItem('departments', JSON.stringify(departments));
+            }
+        }
+
+        // 页面切换
+        function showLogin() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('registerError').style.display = 'none';
+            document.getElementById('registerSuccess').style.display = 'none';
+        }
+
+        function showRegister() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('registerPage').classList.remove('hidden');
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('registerError').style.display = 'none';
+            document.getElementById('registerSuccess').style.display = 'none';
+        }
+
+        // 登录
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            // 管理员登录
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                const user = {
+                    username: ADMIN_USERNAME,
+                    department: '管理层',
+                    position: '系统管理员',
+                    email: 'admin@company.com',
+                    phone: '',
+                    role: 'admin',
+                    registerDate: new Date().toISOString()
+                };
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // 普通用户登录
+            const users = JSON.parse(localStorage.getItem('users'));
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                window.location.href = 'index.html';
+            } else {
+                errorDiv.textContent = '用户名或密码错误';
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // 注册
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const passwordConfirm = document.getElementById('regPasswordConfirm').value;
+            const department = document.getElementById('regDepartment').value;
+            const position = document.getElementById('regPosition').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const errorDiv = document.getElementById('registerError');
+            const successDiv = document.getElementById('registerSuccess');
+
+            // 验证密码
+            if (password !== passwordConfirm) {
+                errorDiv.textContent = '两次输入的密码不一致';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // 不允许使用管理员密码
+            if (password === ADMIN_PASSWORD) {
+                errorDiv.textContent = '密码不能与管理员密码相同';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // 检查用户名是否已存在
+            const users = JSON.parse(localStorage.getItem('users'));
+            if (users.find(u => u.username === username) || username === ADMIN_USERNAME) {
+                errorDiv.textContent = '用户名已存在';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // 创建用户
+            const newUser = {
+                username,
+                password,
+                department,
+                position,
+                email,
+                phone,
+                role: 'user',
+                registerDate: new Date().toISOString(),
+                loginCount: 0,
+                lastLogin: null
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // 添加到部门
+            const departments = JSON.parse(localStorage.getItem('departments'));
+            const dept = departments.find(d => d.name === department);
+            if (dept) {
+                dept.members.push({
+                    username,
+                    position,
+                    status: 'online'
+                });
+                localStorage.setItem('departments', JSON.stringify(departments));
+            }
+
+            successDiv.textContent = '注册成功！即将跳转到登录页面...';
+            successDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+
+            setTimeout(() => {
+                showLogin();
+                successDiv.style.display = 'none';
+            }, 2000);
+        });
+
+        // 检查登录状态
+        function checkLoginStatus() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser && currentUser !== '') {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // 初始化
+        initData();
+        checkLoginStatus();
+    </script>
+</body>
+</html>
