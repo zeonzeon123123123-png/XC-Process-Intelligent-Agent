@@ -515,6 +515,52 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
+        /* 文档分析展示 */
+        .doc-analysis {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .doc-type-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .doc-type-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .doc-type-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .doc-stat {
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .doc-stat-value {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 18px;
+        }
+
+        .doc-stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
         /* 隐藏类 */
         .hidden {
             display: none !important;
@@ -593,6 +639,7 @@
                     <label>所在部门 *</label>
                     <select id="regDepartment" required>
                         <option value="">请选择部门</option>
+                        <option value="管理层">管理层</option>
                         <option value="项目部">项目部</option>
                         <option value="产品部">产品部</option>
                         <option value="软件部">软件部</option>
@@ -600,7 +647,6 @@
                         <option value="结构部">结构部</option>
                         <option value="测试部">测试部</option>
                         <option value="商务部">商务部</option>
-                        <option value="管理层">管理层</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -632,6 +678,7 @@
                 <li><a href="#" class="active" onclick="showPage('home')">首页</a></li>
                 <li><a href="#" onclick="showPage('contact')">通讯录</a></li>
                 <li><a href="#" onclick="showPage('profile')">个人主页</a></li>
+                <li><a href="#" onclick="showPage('analysis')">文档分析</a></li>
                 <li id="adminNav" class="hidden"><a href="#" onclick="showPage('admin')">管理后台</a></li>
             </ul>
             <div class="user-info">
@@ -663,12 +710,12 @@
                         <div class="stat-label">部门数量</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" id="myProjects">0</div>
-                        <div class="stat-label">我的项目</div>
+                        <div class="stat-value" id="totalProjects">24</div>
+                        <div class="stat-label">项目总数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" id="myTasks">0</div>
-                        <div class="stat-label">我的任务</div>
+                        <div class="stat-value" id="totalDocuments">160</div>
+                        <div class="stat-label">文档总数</div>
                     </div>
                 </div>
 
@@ -677,13 +724,14 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                         <button class="btn" onclick="showPage('contact')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📇 查看通讯录</button>
                         <button class="btn" onclick="showPage('profile')" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">👤 个人主页</button>
-                        <a href="smart-agent-config-v2.html" class="btn" style="background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%); text-decoration: none; text-align: center;">⚙️ 配置中心</a>
+                        <button class="btn" onclick="showPage('analysis')" style="background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);">📊 文档分析</button>
+                        <a href="smart-agent-config-v2.html" class="btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); text-decoration: none; text-align: center;">⚙️ 旧版配置</a>
                         <button id="adminBtn" class="btn hidden" onclick="showPage('admin')" style="background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);">🔧 管理后台</button>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-title">📊 部门文档</div>
+                    <div class="card-title">📄 部门工作方案</div>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
                         <a href="docs/01-项目部工作方案.md" class="btn" style="background: #f0f0f0; color: #333; text-decoration: none; text-align: center;">📄 项目部工作方案</a>
                         <a href="docs/02-产品部工作方案.md" class="btn" style="background: #f0f0f0; color: #333; text-decoration: none; text-align: center;">📄 产品部工作方案</a>
@@ -691,6 +739,49 @@
                         <a href="docs/04-硬件部工作方案.md" class="btn" style="background: #f0f0f0; color: #333; text-decoration: none; text-align: center;">📄 硬件部工作方案</a>
                         <a href="docs/05-结构部工作方案.md" class="btn" style="background: #f0f0f0; color: #333; text-decoration: none; text-align: center;">📄 结构部工作方案</a>
                         <a href="docs/06-智能体搭建方案.md" class="btn" style="background: #f0f0f0; color: #333; text-decoration: none; text-align: center;">📄 智能体搭建方案</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📊 研发流程概览</div>
+                    <div class="doc-analysis">
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                            <div class="doc-stat" style="background: #667eea; color: white;">
+                                <div class="doc-stat-value">立项申请</div>
+                                <div class="doc-stat-label" style="color: rgba(255,255,255,0.8)">PLM 申请</div>
+                            </div>
+                            <div style="align-self: center; font-size: 24px; color: #667eea;">→</div>
+                            <div class="doc-stat" style="background: #667eea; color: white;">
+                                <div class="doc-stat-value">立项评审</div>
+                                <div class="doc-stat-label" style="color: rgba(255,255,255,0.8)">立项书 + 评审</div>
+                            </div>
+                            <div style="align-self: center; font-size: 24px; color: #667eea;">→</div>
+                            <div class="doc-stat" style="background: #667eea; color: white;">
+                                <div class="doc-stat-value">可行性分析</div>
+                                <div class="doc-stat-label" style="color: rgba(255,255,255,0.8)">可行性报告</div>
+                            </div>
+                            <div style="align-self: center; font-size: 24px; color: #667eea;">→</div>
+                            <div class="doc-stat" style="background: #667eea; color: white;">
+                                <div class="doc-stat-value">正式立项</div>
+                                <div class="doc-stat-label" style="color: rgba(255,255,255,0.8)">立项说明</div>
+                            </div>
+                            <div style="align-self: center; font-size: 24px; color: #667eea;">→</div>
+                            <div class="doc-stat" style="background: #667eea; color: white;">
+                                <div class="doc-stat-value">项目启动</div>
+                                <div class="doc-stat-label" style="color: rgba(255,255,255,0.8)">项目章程</div>
+                            </div>
+                            <div style="align-self: center; font-size: 24px; color: #667eea;">→</div>
+                            <div class="doc-stat" style="background: #667eea; color: white;">
+                                <div class="doc-stat-value">项目执行</div>
+                                <div class="doc-stat-label" style="color: rgba(255,255,255,0.8)">状态表</div>
+                            </div>
+                            <div style="align-self: center; font-size: 24px; color: #667eea;">→</div>
+                            <div class="doc-stat" style="background: #667eea; color: white;">
+                                <div class="doc-stat-value">项目结项</div>
+                                <div class="doc-stat-label" style="color: rgba(255,255,255,0.8)">结项报告</div>
+                            </div>
+                        </div>
+                        <p style="text-align: center; color: #666; font-size: 14px;">基于 24 个研发项目、160 份文档分析得出的标准研发流程</p>
                     </div>
                 </div>
             </div>
@@ -768,6 +859,203 @@
                         </div>
                         <button type="submit" class="btn" style="width: auto; padding: 12px 30px;">修改密码</button>
                     </form>
+                </div>
+            </div>
+
+            <!-- 文档分析页面 -->
+            <div id="analysisPage" class="page">
+                <div class="page-header">
+                    <h2>📊 研发项目文档分析</h2>
+                    <p>基于 24 个研发项目、160 份 PDF 文档的深度分析</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">分析项目</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">160</div>
+                        <div class="stat-label">文档总数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">文档类型</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">核心文档覆盖率</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📋 核心文档类型（覆盖率 100%）</div>
+                    <div class="doc-analysis">
+                        <div class="doc-type-item">
+                            <div class="doc-type-name">📄 立项书</div>
+                            <div class="doc-type-stats">
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">25</div>
+                                    <div class="doc-stat-label">项目数量</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">100%</div>
+                                    <div class="doc-stat-label">覆盖率</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">4,760</div>
+                                    <div class="doc-stat-label">平均字数</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">⭐⭐⭐⭐⭐</div>
+                                    <div class="doc-stat-label">重要性</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-type-item">
+                            <div class="doc-type-name">📄 可行性报告</div>
+                            <div class="doc-type-stats">
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">24</div>
+                                    <div class="doc-stat-label">项目数量</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">100%</div>
+                                    <div class="doc-stat-label">覆盖率</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">11,852</div>
+                                    <div class="doc-stat-label">平均字数</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">⭐⭐⭐⭐⭐</div>
+                                    <div class="doc-stat-label">重要性</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-type-item">
+                            <div class="doc-type-name">📄 正式立项说明</div>
+                            <div class="doc-type-stats">
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">24</div>
+                                    <div class="doc-stat-label">项目数量</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">100%</div>
+                                    <div class="doc-stat-label">覆盖率</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">772</div>
+                                    <div class="doc-stat-label">平均字数</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">⭐⭐⭐⭐</div>
+                                    <div class="doc-stat-label">重要性</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-type-item">
+                            <div class="doc-type-name">📄 项目章程</div>
+                            <div class="doc-type-stats">
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">24</div>
+                                    <div class="doc-stat-label">项目数量</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">100%</div>
+                                    <div class="doc-stat-label">覆盖率</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">10,500</div>
+                                    <div class="doc-stat-label">平均字数</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">⭐⭐⭐⭐⭐</div>
+                                    <div class="doc-stat-label">重要性</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📊 其他文档类型</div>
+                    <div class="doc-analysis">
+                        <div class="doc-type-item">
+                            <div class="doc-type-name">📄 项目状态表</div>
+                            <div class="doc-type-stats">
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">23</div>
+                                    <div class="doc-stat-label">项目数量</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">96%</div>
+                                    <div class="doc-stat-label">覆盖率</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">2,200</div>
+                                    <div class="doc-stat-label">平均字数</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-type-item">
+                            <div class="doc-type-name">📄 评审流程</div>
+                            <div class="doc-type-stats">
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">19</div>
+                                    <div class="doc-stat-label">项目数量</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">79%</div>
+                                    <div class="doc-stat-label">覆盖率</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">2,951</div>
+                                    <div class="doc-stat-label">平均字数</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-type-item">
+                            <div class="doc-type-name">📄 结项报告</div>
+                            <div class="doc-type-stats">
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">8</div>
+                                    <div class="doc-stat-label">项目数量</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">33%</div>
+                                    <div class="doc-stat-label">覆盖率</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">2,276</div>
+                                    <div class="doc-stat-label">平均字数</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-type-item">
+                            <div class="doc-type-name">📄 成果报告</div>
+                            <div class="doc-type-stats">
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">7</div>
+                                    <div class="doc-stat-label">项目数量</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">29%</div>
+                                    <div class="doc-stat-label">覆盖率</div>
+                                </div>
+                                <div class="doc-stat">
+                                    <div class="doc-stat-value">3,079</div>
+                                    <div class="doc-stat-label">平均字数</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1075,7 +1363,7 @@
                         <div class="dept-card">
                             <div class="dept-header">
                                 <div class="dept-name">${dept.name}</div>
-                                <div class="dept-count">${deptUsers.length} 人</div>
+                                <div class="dept-count">${deptUsers.length + (dept.name === '管理层' ? 1 : 0)} 人</div>
                             </div>
                             <div class="dept-members">
                     `;
@@ -1263,7 +1551,7 @@
                     <div class="dept-card">
                         <div class="dept-header">
                             <div class="dept-name">${dept.name}</div>
-                            <div class="dept-count">${dept.members.length} 人</div>
+                            <div class="dept-count">${dept.members.length + (dept.name === '管理层' ? 1 : 0)} 人</div>
                         </div>
                     </div>
                 `;
