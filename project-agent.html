@@ -45,6 +45,7 @@
             color: #667eea;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 600;
         }
 
         .nav-menu {
@@ -57,10 +58,6 @@
             color: #333;
             text-decoration: none;
             font-weight: 500;
-        }
-
-        .nav-menu a:hover {
-            color: #667eea;
         }
 
         .content-wrapper {
@@ -114,6 +111,7 @@
             justify-content: space-between;
             position: relative;
             padding: 20px 0;
+            overflow-x: auto;
         }
 
         .workflow-stages::before {
@@ -132,6 +130,7 @@
             z-index: 2;
             text-align: center;
             flex: 1;
+            min-width: 100px;
         }
 
         .stage-dot {
@@ -172,7 +171,7 @@
 
         .documents-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
         }
 
@@ -240,12 +239,6 @@
             transform: translateY(-2px);
         }
 
-        .btn-outline {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -257,6 +250,8 @@
             z-index: 2000;
             align-items: center;
             justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .modal.active {
@@ -266,10 +261,11 @@
         .modal-content {
             background: white;
             border-radius: 16px;
-            width: 90%;
-            max-width: 800px;
+            width: 100%;
+            max-width: 900px;
             max-height: 90vh;
             overflow-y: auto;
+            margin: 20px 0;
         }
 
         .modal-header {
@@ -278,6 +274,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
         }
 
         .modal-title {
@@ -292,14 +292,35 @@
             font-size: 24px;
             cursor: pointer;
             color: #999;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
         }
 
         .modal-body {
             padding: 30px;
         }
 
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
         .form-group {
             margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
         }
 
         .form-group label {
@@ -307,6 +328,7 @@
             margin-bottom: 8px;
             color: #333;
             font-weight: 600;
+            font-size: 14px;
         }
 
         .form-group input,
@@ -317,6 +339,7 @@
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
+            font-family: inherit;
         }
 
         .form-group textarea {
@@ -331,33 +354,38 @@
             border-color: #667eea;
         }
 
-        .field-list {
-            margin-bottom: 20px;
+        .required {
+            color: #e53935;
         }
 
-        .field-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 2px solid #f0f0f0;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 15px;
+            justify-content: flex-end;
+            position: sticky;
+            bottom: 0;
+            background: white;
         }
 
-        .field-name {
-            font-weight: 600;
+        .btn-secondary {
+            background: #e0e0e0;
             color: #333;
         }
 
-        .field-actions {
-            display: flex;
-            gap: 10px;
-        }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 15px;
+            }
 
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 12px;
+            .nav-menu {
+                display: none;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -439,12 +467,12 @@
             </div>
             <div class="modal-body">
                 <form id="docForm">
-                    <div id="formFields"></div>
-                    <div style="margin-top: 30px; display: flex; gap: 15px;">
-                        <button type="submit" class="btn">生成文档</button>
-                        <button type="button" class="btn btn-outline" onclick="closeModal()">取消</button>
-                    </div>
+                    <div class="form-grid" id="formFields"></div>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button type="submit" form="docForm" class="btn">生成文档</button>
             </div>
         </div>
     </div>
@@ -462,18 +490,18 @@
                     { name: '项目类型', type: 'select', options: ['自研', 'JDM', 'ODM', 'OEM'], required: true },
                     { name: '优先级', type: 'select', options: ['P0', 'P1', 'P2', 'P3'], required: true },
                     { name: '风险等级', type: 'select', options: ['高', '中', '低'], required: true },
-                    { name: '技术可行性', type: 'textarea', required: true },
-                    { name: '市场可行性', type: 'textarea', required: true },
-                    { name: '资源可行性', type: 'textarea', required: true },
-                    { name: '技术目标', type: 'textarea', required: true },
-                    { name: '市场目标', type: 'textarea', required: true },
-                    { name: '商业目标', type: 'textarea', required: true },
-                    { name: '人力需求', type: 'textarea', required: true },
+                    { name: '技术可行性', type: 'textarea', required: true, fullWidth: true },
+                    { name: '市场可行性', type: 'textarea', required: true, fullWidth: true },
+                    { name: '资源可行性', type: 'textarea', required: true, fullWidth: true },
+                    { name: '技术目标', type: 'textarea', required: true, fullWidth: true },
+                    { name: '市场目标', type: 'textarea', required: true, fullWidth: true },
+                    { name: '商业目标', type: 'textarea', required: true, fullWidth: true },
+                    { name: '人力需求', type: 'textarea', required: true, fullWidth: true },
                     { name: '预算需求', type: 'text', required: true },
                     { name: '开发周期（月）', type: 'number', required: true },
-                    { name: '关键里程碑', type: 'textarea', required: true },
-                    { name: '技术风险', type: 'textarea', required: true },
-                    { name: '应对措施', type: 'textarea', required: true }
+                    { name: '关键里程碑', type: 'textarea', required: true, fullWidth: true },
+                    { name: '技术风险', type: 'textarea', required: true, fullWidth: true },
+                    { name: '应对措施', type: 'textarea', required: true, fullWidth: true }
                 ]
             },
             '可行性报告': {
@@ -481,19 +509,19 @@
                 desc: '技术可行性分析，包含技术方案、关键技术分析、资源需求等',
                 fields: [
                     { name: '项目名称', type: 'text', required: true },
-                    { name: '编写目的', type: 'textarea', required: true },
-                    { name: '范围', type: 'textarea', required: true },
+                    { name: '编写目的', type: 'textarea', required: true, fullWidth: true },
+                    { name: '范围', type: 'textarea', required: true, fullWidth: true },
                     { name: '技术可行性评估结论', type: 'select', options: ['可行', '基本可行', '不可行'], required: true },
                     { name: '技术风险评估', type: 'select', options: ['高', '中', '低'], required: true },
-                    { name: '公司现有技术状况', type: 'textarea', required: true },
-                    { name: '关键产品需求分析', type: 'textarea', required: true },
-                    { name: '整体技术方案', type: 'textarea', required: true },
-                    { name: '硬件技术方案', type: 'textarea', required: true },
-                    { name: '软件技术方案', type: 'textarea', required: true },
-                    { name: '结构技术方案', type: 'textarea', required: true },
-                    { name: '关键技术分析', type: 'textarea', required: true },
-                    { name: '人力资源需求', type: 'textarea', required: true },
-                    { name: '设备资源需求', type: 'textarea', required: true },
+                    { name: '公司现有技术状况', type: 'textarea', required: true, fullWidth: true },
+                    { name: '关键产品需求分析', type: 'textarea', required: true, fullWidth: true },
+                    { name: '整体技术方案', type: 'textarea', required: true, fullWidth: true },
+                    { name: '硬件技术方案', type: 'textarea', required: true, fullWidth: true },
+                    { name: '软件技术方案', type: 'textarea', required: true, fullWidth: true },
+                    { name: '结构技术方案', type: 'textarea', required: true, fullWidth: true },
+                    { name: '关键技术分析', type: 'textarea', required: true, fullWidth: true },
+                    { name: '人力资源需求', type: 'textarea', required: true, fullWidth: true },
+                    { name: '设备资源需求', type: 'textarea', required: true, fullWidth: true },
                     { name: '预算需求', type: 'text', required: true }
                 ]
             },
@@ -502,9 +530,9 @@
                 desc: '正式立项审批文档，包含项目背景、资源需求、审批意见',
                 fields: [
                     { name: '项目名称', type: 'text', required: true },
-                    { name: '市场需求', type: 'textarea', required: true },
-                    { name: '技术趋势', type: 'textarea', required: true },
-                    { name: '竞争分析', type: 'textarea', required: true },
+                    { name: '市场需求', type: 'textarea', required: true, fullWidth: true },
+                    { name: '技术趋势', type: 'textarea', required: true, fullWidth: true },
+                    { name: '竞争分析', type: 'textarea', required: true, fullWidth: true },
                     { name: '预算（元）', type: 'number', required: true },
                     { name: '人力（人）', type: 'number', required: true },
                     { name: '周期（月）', type: 'number', required: true },
@@ -516,21 +544,21 @@
                 desc: '项目启动文档，包含项目组织、计划、资源、风险管理等',
                 fields: [
                     { name: '项目名称', type: 'text', required: true },
-                    { name: '项目背景', type: 'textarea', required: true },
-                    { name: '项目目标', type: 'textarea', required: true },
-                    { name: '项目范围', type: 'textarea', required: true },
-                    { name: '项目组织结构', type: 'textarea', required: true },
-                    { name: '角色与职责', type: 'textarea', required: true },
-                    { name: '总体进度计划', type: 'textarea', required: true },
-                    { name: '关键里程碑', type: 'textarea', required: true },
-                    { name: '交付物清单', type: 'textarea', required: true },
-                    { name: '人力资源计划', type: 'textarea', required: true },
-                    { name: '财务预算', type: 'textarea', required: true },
-                    { name: '风险识别', type: 'textarea', required: true },
-                    { name: '风险评估', type: 'textarea', required: true },
-                    { name: '风险应对策略', type: 'textarea', required: true },
-                    { name: '质量标准', type: 'textarea', required: true },
-                    { name: '验收标准', type: 'textarea', required: true }
+                    { name: '项目背景', type: 'textarea', required: true, fullWidth: true },
+                    { name: '项目目标', type: 'textarea', required: true, fullWidth: true },
+                    { name: '项目范围', type: 'textarea', required: true, fullWidth: true },
+                    { name: '项目组织结构', type: 'textarea', required: true, fullWidth: true },
+                    { name: '角色与职责', type: 'textarea', required: true, fullWidth: true },
+                    { name: '总体进度计划', type: 'textarea', required: true, fullWidth: true },
+                    { name: '关键里程碑', type: 'textarea', required: true, fullWidth: true },
+                    { name: '交付物清单', type: 'textarea', required: true, fullWidth: true },
+                    { name: '人力资源计划', type: 'textarea', required: true, fullWidth: true },
+                    { name: '财务预算', type: 'textarea', required: true, fullWidth: true },
+                    { name: '风险识别', type: 'textarea', required: true, fullWidth: true },
+                    { name: '风险评估', type: 'textarea', required: true, fullWidth: true },
+                    { name: '风险应对策略', type: 'textarea', required: true, fullWidth: true },
+                    { name: '质量标准', type: 'textarea', required: true, fullWidth: true },
+                    { name: '验收标准', type: 'textarea', required: true, fullWidth: true }
                 ]
             },
             '项目状态表': {
@@ -548,11 +576,11 @@
                     { name: '量产阶段', type: 'select', options: ['未开始', '进行中', '已完成', '已跳过'], required: true },
                     { name: '进度偏差（%）', type: 'number', required: true },
                     { name: '成本偏差（%）', type: 'number', required: true },
-                    { name: '当前风险', type: 'textarea', required: true },
-                    { name: '已解决问题', type: 'textarea', required: true },
-                    { name: '待解决问题', type: 'textarea', required: true },
-                    { name: '本期完成工作', type: 'textarea', required: true },
-                    { name: '下期工作计划', type: 'textarea', required: true }
+                    { name: '当前风险', type: 'textarea', required: true, fullWidth: true },
+                    { name: '已解决问题', type: 'textarea', required: true, fullWidth: true },
+                    { name: '待解决问题', type: 'textarea', required: true, fullWidth: true },
+                    { name: '本期完成工作', type: 'textarea', required: true, fullWidth: true },
+                    { name: '下期工作计划', type: 'textarea', required: true, fullWidth: true }
                 ]
             },
             '结项报告': {
@@ -560,17 +588,17 @@
                 desc: '项目结项文档，包含目标完成情况、技术实现、成果输出等',
                 fields: [
                     { name: '项目名称', type: 'text', required: true },
-                    { name: '项目背景', type: 'textarea', required: true },
-                    { name: '原定目标', type: 'textarea', required: true },
-                    { name: '实际完成', type: 'textarea', required: true },
-                    { name: '偏差分析', type: 'textarea', required: true },
-                    { name: '关键技术实现', type: 'textarea', required: true },
-                    { name: '测试验证与质量确认', type: 'textarea', required: true },
-                    { name: '成果输出（专利）', type: 'textarea', required: true },
-                    { name: '成果输出（技术文档）', type: 'textarea', required: true },
-                    { name: '成果输出（产品）', type: 'textarea', required: true },
-                    { name: '经验总结', type: 'textarea', required: true },
-                    { name: '改进建议', type: 'textarea', required: true },
+                    { name: '项目背景', type: 'textarea', required: true, fullWidth: true },
+                    { name: '原定目标', type: 'textarea', required: true, fullWidth: true },
+                    { name: '实际完成', type: 'textarea', required: true, fullWidth: true },
+                    { name: '偏差分析', type: 'textarea', required: true, fullWidth: true },
+                    { name: '关键技术实现', type: 'textarea', required: true, fullWidth: true },
+                    { name: '测试验证与质量确认', type: 'textarea', required: true, fullWidth: true },
+                    { name: '成果输出（专利）', type: 'textarea', required: true, fullWidth: true },
+                    { name: '成果输出（技术文档）', type: 'textarea', required: true, fullWidth: true },
+                    { name: '成果输出（产品）', type: 'textarea', required: true, fullWidth: true },
+                    { name: '经验总结', type: 'textarea', required: true, fullWidth: true },
+                    { name: '改进建议', type: 'textarea', required: true, fullWidth: true },
                     { name: '项目状态评估', type: 'select', options: ['优秀', '良好', '合格', '不合格'], required: true }
                 ]
             },
@@ -581,14 +609,14 @@
                     { name: '项目名称', type: 'text', required: true },
                     { name: '项目类型', type: 'select', options: ['自研', 'JDM', 'ODM', 'OEM'], required: true },
                     { name: '项目起止时间', type: 'text', required: true },
-                    { name: '项目领导小组', type: 'textarea', required: true },
-                    { name: '研发团队', type: 'textarea', required: true },
-                    { name: '技术创新点', type: 'textarea', required: true },
-                    { name: '产品创新点', type: 'textarea', required: true },
-                    { name: '实施方式', type: 'textarea', required: true },
-                    { name: '经济效益', type: 'textarea', required: true },
-                    { name: '技术效益', type: 'textarea', required: true },
-                    { name: '市场效益', type: 'textarea', required: true }
+                    { name: '项目领导小组', type: 'textarea', required: true, fullWidth: true },
+                    { name: '研发团队', type: 'textarea', required: true, fullWidth: true },
+                    { name: '技术创新点', type: 'textarea', required: true, fullWidth: true },
+                    { name: '产品创新点', type: 'textarea', required: true, fullWidth: true },
+                    { name: '实施方式', type: 'textarea', required: true, fullWidth: true },
+                    { name: '经济效益', type: 'textarea', required: true, fullWidth: true },
+                    { name: '技术效益', type: 'textarea', required: true, fullWidth: true },
+                    { name: '市场效益', type: 'textarea', required: true, fullWidth: true }
                 ]
             },
             '评审流程': {
@@ -601,12 +629,12 @@
                     { name: '发起人', type: 'text', required: true },
                     { name: '接收人', type: 'text', required: true },
                     { name: '批准人', type: 'text', required: true },
-                    { name: '评审委员会成员', type: 'textarea', required: true },
-                    { name: '技术可行性评审', type: 'textarea', required: true },
-                    { name: '商业可行性评审', type: 'textarea', required: true },
-                    { name: '资源可用性评审', type: 'textarea', required: true },
+                    { name: '评审委员会成员', type: 'textarea', required: true, fullWidth: true },
+                    { name: '技术可行性评审', type: 'textarea', required: true, fullWidth: true },
+                    { name: '商业可行性评审', type: 'textarea', required: true, fullWidth: true },
+                    { name: '资源可用性评审', type: 'textarea', required: true, fullWidth: true },
                     { name: '评审结论', type: 'select', options: ['通过', '有条件通过', '不通过'], required: true },
-                    { name: '评审意见', type: 'textarea', required: true }
+                    { name: '评审意见', type: 'textarea', required: true, fullWidth: true }
                 ]
             }
         };
@@ -616,7 +644,7 @@
         function loadCurrentProject() {
             const projectId = new URLSearchParams(window.location.search).get('project');
             if (projectId) {
-                const projects = JSON.parse(localStorage.getItem('projects'));
+                const projects = JSON.parse(localStorage.getItem('projects') || '[]');
                 currentProject = projects.find(p => p.id === projectId);
                 if (currentProject) {
                     updateWorkflow(currentProject.stage);
@@ -652,7 +680,7 @@
                         <div class="doc-desc">${docConfig.desc}</div>
                         <div class="doc-meta">
                             <span>${docConfig.fields.length} 个字段</span>
-                            <button class="btn btn-sm">生成</button>
+                            <button class="btn" style="padding: 6px 12px; font-size: 12px;">填写</button>
                         </div>
                     </div>
                 `;
@@ -664,11 +692,14 @@
         // 打开文档生成模态框
         function openDocModal(docName) {
             const docConfig = documentTemplates[docName];
-            document.getElementById('modalTitle').textContent = '生成：' + docName;
+            document.getElementById('modalTitle').textContent = '填写：' + docName;
 
             let fieldsHtml = '';
             docConfig.fields.forEach((field, index) => {
+                const requiredMark = field.required ? '<span class="required">*</span>' : '';
+                const fullWidthClass = field.fullWidth ? 'full-width' : '';
                 let inputHtml = '';
+                
                 if (field.type === 'textarea') {
                     inputHtml = `<textarea name="field_${index}" ${field.required ? 'required' : ''} placeholder="请输入${field.name}"></textarea>`;
                 } else if (field.type === 'select') {
@@ -681,8 +712,8 @@
                 }
 
                 fieldsHtml += `
-                    <div class="form-group">
-                        <label>${field.name} ${field.required ? '*' : ''}</label>
+                    <div class="form-group ${fullWidthClass}">
+                        <label>${field.name} ${requiredMark}</label>
                         ${inputHtml}
                     </div>
                 `;
@@ -700,8 +731,37 @@
         // 生成文档
         document.getElementById('docForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // 收集表单数据
+            const formData = new FormData(this);
+            const docData = {};
+            formData.forEach((value, key) => {
+                docData[key] = value;
+            });
+
+            // 保存到项目
+            if (currentProject) {
+                if (!currentProject.documents) {
+                    currentProject.documents = [];
+                }
+                currentProject.documents.push({
+                    name: document.getElementById('modalTitle').textContent.replace('填写：', ''),
+                    data: docData,
+                    created: new Date().toISOString()
+                });
+
+                // 更新项目
+                const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+                const index = projects.findIndex(p => p.id === currentProject.id);
+                if (index !== -1) {
+                    projects[index] = currentProject;
+                    localStorage.setItem('projects', JSON.stringify(projects));
+                }
+            }
+
             alert('文档生成成功！文档已保存到项目文档库。');
             closeModal();
+            this.reset();
         });
 
         // 初始化
