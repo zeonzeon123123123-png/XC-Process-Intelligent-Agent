@@ -7,6 +7,8 @@
 ### 智能体配置网页
 **👉 [点击这里打开智能体系统](https://raw.githack.com/zeonzeon123123123-png/XC-Process-Intelligent-Agent/main/login.html)**
 
+> ⚠️ **注意**：本网页为独立系统，所有数据存储在本地浏览器中
+
 ---
 
 ## ✨ 系统功能
@@ -161,11 +163,7 @@ XC-Process-Intelligent-Agent/
 
 ---
 
-## 🔗 相关链接
 
-- [OpenClaw 文档](https://docs.openclaw.ai)
-- [飞书开放平台](https://open.feishu.cn/document)
-- [GitHub](https://github.com)
 
 ---
 
