@@ -60,7 +60,7 @@
 
         .admin-grid {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 280px 1fr;
             gap: 30px;
         }
 
@@ -77,16 +77,17 @@
         }
 
         .sidebar-menu li {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .sidebar-menu a {
             display: block;
-            padding: 12px 15px;
+            padding: 14px 18px;
             color: #333;
             text-decoration: none;
-            border-radius: 8px;
-            transition: background 0.3s;
+            border-radius: 10px;
+            transition: background 0.3s, color 0.3s;
+            font-weight: 500;
         }
 
         .sidebar-menu a:hover,
@@ -107,6 +108,9 @@
             font-weight: 700;
             color: #333;
             margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .config-section {
@@ -119,6 +123,8 @@
 
         .table-container {
             overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
         }
 
         table {
@@ -136,6 +142,11 @@
             background: #f8f9fa;
             font-weight: 600;
             color: #333;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
         }
 
         tr:hover {
@@ -143,7 +154,7 @@
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -159,8 +170,8 @@
         }
 
         .btn-sm {
-            padding: 6px 12px;
-            font-size: 12px;
+            padding: 8px 16px;
+            font-size: 13px;
         }
 
         .btn-danger {
@@ -171,32 +182,10 @@
             background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
         }
 
-        .form-group {
+        .action-bar {
             margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
+            display: flex;
+            gap: 15px;
         }
 
         .stats-grid {
@@ -246,7 +235,7 @@
             background: white;
             border-radius: 16px;
             width: 90%;
-            max-width: 600px;
+            max-width: 700px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -271,10 +260,82 @@
             font-size: 24px;
             cursor: pointer;
             color: #999;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
         }
 
         .modal-body {
             padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -297,9 +358,9 @@
                     <li><a href="#" class="active" onclick="showSection('dashboard', this)">📊 数据概览</a></li>
                     <li><a href="#" onclick="showSection('users', this)">👥 用户管理</a></li>
                     <li><a href="#" onclick="showSection('documents', this)">📄 文档模板管理</a></li>
-                    <li><a href="#" onclick="showSection('workflow', this)">🔄 流程规则配置</a></li>
-                    <li><a href="#" onclick="showSection('sync', this)">🔗 数据同步规则</a></li>
                     <li><a href="#" onclick="showSection('fields', this)">📝 字段管理</a></li>
+                    <li><a href="#" onclick="showSection('workflow', this)">🔄 流转规则</a></li>
+                    <li><a href="#" onclick="showSection('sync', this)">🔗 同步规则</a></li>
                     <li><a href="#" onclick="showSection('departments', this)">🏢 部门管理</a></li>
                 </ul>
             </div>
@@ -332,7 +393,7 @@
                 <!-- 用户管理 -->
                 <div id="users" class="config-section">
                     <h2 class="section-title">👥 用户管理</h2>
-                    <div style="margin-bottom: 20px;">
+                    <div class="action-bar">
                         <button class="btn" onclick="openUserModal()">+ 添加用户</button>
                     </div>
                     <div class="table-container">
@@ -355,7 +416,7 @@
                 <!-- 文档模板管理 -->
                 <div id="documents" class="config-section">
                     <h2 class="section-title">📄 文档模板管理</h2>
-                    <div style="margin-bottom: 20px;">
+                    <div class="action-bar">
                         <button class="btn" onclick="openDocTemplateModal()">+ 添加文档模板</button>
                     </div>
                     <div class="table-container">
@@ -373,11 +434,33 @@
                     </div>
                 </div>
 
-                <!-- 流程规则配置 -->
+                <!-- 字段管理 -->
+                <div id="fields" class="config-section">
+                    <h2 class="section-title">📝 字段管理</h2>
+                    <div class="action-bar">
+                        <button class="btn" onclick="openFieldModal()">+ 添加字段</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>字段名称</th>
+                                    <th>字段类型</th>
+                                    <th>适用文档</th>
+                                    <th>必填</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fieldTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 流转规则 -->
                 <div id="workflow" class="config-section">
-                    <h2 class="section-title">🔄 流程规则配置</h2>
-                    <div style="margin-bottom: 20px;">
-                        <button class="btn" onclick="openWorkflowModal()">+ 添加流程规则</button>
+                    <h2 class="section-title">🔄 流转规则管理</h2>
+                    <div class="action-bar">
+                        <button class="btn" onclick="openWorkflowModal()">+ 添加流转规则</button>
                     </div>
                     <div class="table-container">
                         <table>
@@ -395,10 +478,10 @@
                     </div>
                 </div>
 
-                <!-- 数据同步规则 -->
+                <!-- 同步规则 -->
                 <div id="sync" class="config-section">
-                    <h2 class="section-title">🔗 数据同步规则</h2>
-                    <div style="margin-bottom: 20px;">
+                    <h2 class="section-title">🔗 同步规则管理</h2>
+                    <div class="action-bar">
                         <button class="btn" onclick="openSyncModal()">+ 添加同步规则</button>
                     </div>
                     <div class="table-container">
@@ -417,28 +500,6 @@
                     </div>
                 </div>
 
-                <!-- 字段管理 -->
-                <div id="fields" class="config-section">
-                    <h2 class="section-title">📝 字段管理</h2>
-                    <div style="margin-bottom: 20px;">
-                        <button class="btn" onclick="openFieldModal()">+ 添加字段</button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>字段名称</th>
-                                    <th>字段类型</th>
-                                    <th>适用文档</th>
-                                    <th>是否必填</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="fieldTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-
                 <!-- 部门管理 -->
                 <div id="departments" class="config-section">
                     <h2 class="section-title">🏢 部门管理</h2>
@@ -448,7 +509,6 @@
                                 <tr>
                                     <th>部门名称</th>
                                     <th>人员数量</th>
-                                    <th>负责人</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -460,7 +520,28 @@
         </div>
     </div>
 
+    <!-- 通用模态框 -->
+    <div class="modal" id="commonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">标题</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 动态内容 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button type="button" class="btn" onclick="saveModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // 当前编辑的数据
+        let currentEditData = null;
+        let currentSection = '';
+
         // 切换配置页面
         function showSection(sectionId, element) {
             document.querySelectorAll('.config-section').forEach(s => s.classList.remove('active'));
@@ -468,14 +549,15 @@
             
             document.getElementById(sectionId).classList.add('active');
             element.classList.add('active');
+            currentSection = sectionId;
 
             // 加载对应数据
             if (sectionId === 'dashboard') loadDashboard();
             else if (sectionId === 'users') loadUsers();
             else if (sectionId === 'documents') loadDocTemplates();
+            else if (sectionId === 'fields') loadFields();
             else if (sectionId === 'workflow') loadWorkflow();
             else if (sectionId === 'sync') loadSync();
-            else if (sectionId === 'fields') loadFields();
             else if (sectionId === 'departments') loadDepartments();
         }
 
@@ -558,7 +640,38 @@
             tbody.innerHTML = html;
         }
 
-        // 加载流程规则
+        // 加载字段管理
+        function loadFields() {
+            const fields = [
+                { name: '项目名称', type: '文本', docs: '所有文档', required: '是' },
+                { name: '项目编号', type: '文本', docs: '所有文档', required: '是' },
+                { name: '优先级', type: '单选', docs: '立项书，状态表', required: '是' },
+                { name: '预算', type: '数字', docs: '立项书，章程', required: '是' },
+                { name: '开发周期', type: '数字', docs: '立项书，章程', required: '是' }
+            ];
+            
+            const tbody = document.getElementById('fieldTableBody');
+            let html = '';
+            
+            fields.forEach((field, index) => {
+                html += `
+                    <tr>
+                        <td>${field.name}</td>
+                        <td>${field.type}</td>
+                        <td>${field.docs}</td>
+                        <td>${field.required}</td>
+                        <td>
+                            <button class="btn btn-sm" onclick="editField(${index})">编辑</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteField(${index})">删除</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+
+        // 加载流转规则
         function loadWorkflow() {
             const rules = [
                 { name: '立项→规划', from: '立项', to: '规划', condition: '立项书已审批' },
@@ -620,48 +733,17 @@
             tbody.innerHTML = html;
         }
 
-        // 加载字段管理
-        function loadFields() {
-            const fields = [
-                { name: '项目名称', type: '文本', docs: '所有文档', required: '是' },
-                { name: '项目编号', type: '文本', docs: '所有文档', required: '是' },
-                { name: '优先级', type: '单选', docs: '立项书，状态表', required: '是' },
-                { name: '预算', type: '数字', docs: '立项书，章程', required: '是' },
-                { name: '开发周期', type: '数字', docs: '立项书，章程', required: '是' }
-            ];
-            
-            const tbody = document.getElementById('fieldTableBody');
-            let html = '';
-            
-            fields.forEach((field, index) => {
-                html += `
-                    <tr>
-                        <td>${field.name}</td>
-                        <td>${field.type}</td>
-                        <td>${field.docs}</td>
-                        <td>${field.required}</td>
-                        <td>
-                            <button class="btn btn-sm" onclick="editField(${index})">编辑</button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteField(${index})">删除</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tbody.innerHTML = html;
-        }
-
         // 加载部门管理
         function loadDepartments() {
             const depts = [
-                { name: '管理层', count: 1, leader: 'admin' },
-                { name: '项目部', count: 0, leader: '-' },
-                { name: '产品部', count: 0, leader: '-' },
-                { name: '软件部', count: 0, leader: '-' },
-                { name: '硬件部', count: 0, leader: '-' },
-                { name: '结构部', count: 0, leader: '-' },
-                { name: '测试部', count: 0, leader: '-' },
-                { name: '商务部', count: 0, leader: '-' }
+                { name: '管理层', count: 1 },
+                { name: '项目部', count: 0 },
+                { name: '产品部', count: 0 },
+                { name: '软件部', count: 0 },
+                { name: '硬件部', count: 0 },
+                { name: '结构部', count: 0 },
+                { name: '测试部', count: 0 },
+                { name: '商务部', count: 0 }
             ];
             
             const tbody = document.getElementById('deptTableBody');
@@ -672,7 +754,6 @@
                     <tr>
                         <td>${dept.name}</td>
                         <td>${dept.count}</td>
-                        <td>${dept.leader}</td>
                         <td>
                             <button class="btn btn-sm" onclick="editDept(${index})">编辑</button>
                         </td>
@@ -683,24 +764,96 @@
             tbody.innerHTML = html;
         }
 
-        // 模态框函数（简化版）
-        function openUserModal() { alert('添加用户功能'); }
-        function openDocTemplateModal() { alert('添加文档模板功能'); }
-        function openWorkflowModal() { alert('添加流程规则功能'); }
-        function openSyncModal() { alert('添加同步规则功能'); }
-        function openFieldModal() { alert('添加字段功能'); }
-        
+        // 模态框函数
+        function openUserModal() {
+            document.getElementById('modalTitle').textContent = '添加用户';
+            document.getElementById('modalBody').innerHTML = `
+                <div class="form-group">
+                    <label>用户名 *</label>
+                    <input type="text" id="editUsername" placeholder="请输入用户名">
+                </div>
+                <div class="form-group">
+                    <label>密码 *</label>
+                    <input type="password" id="editPassword" placeholder="请输入密码">
+                </div>
+                <div class="form-group">
+                    <label>部门 *</label>
+                    <select id="editDepartment">
+                        <option value="管理层">管理层</option>
+                        <option value="项目部">项目部</option>
+                        <option value="产品部">产品部</option>
+                        <option value="软件部">软件部</option>
+                        <option value="硬件部">硬件部</option>
+                        <option value="结构部">结构部</option>
+                        <option value="测试部">测试部</option>
+                        <option value="商务部">商务部</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>职务 *</label>
+                    <input type="text" id="editPosition" placeholder="请输入职务">
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="editEmail" placeholder="请输入邮箱">
+                </div>
+            `;
+            currentEditData = null;
+            document.getElementById('commonModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('commonModal').classList.remove('active');
+        }
+
+        function saveModal() {
+            if (currentSection === 'users') {
+                const username = document.getElementById('editUsername').value;
+                const password = document.getElementById('editPassword').value;
+                const department = document.getElementById('editDepartment').value;
+                const position = document.getElementById('editPosition').value;
+                const email = document.getElementById('editEmail').value;
+
+                if (!username || !password || !department || !position) {
+                    alert('请填写必填字段');
+                    return;
+                }
+
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                users.push({
+                    username,
+                    password,
+                    department,
+                    position,
+                    email,
+                    role: 'user',
+                    registerDate: new Date().toISOString()
+                });
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                alert('用户添加成功');
+                closeModal();
+                loadUsers();
+            }
+        }
+
+        // 编辑删除函数（简化版）
         function editUser(i) { alert('编辑用户 ' + i); }
         function deleteUser(i) { if(confirm('确定删除？')) { alert('删除用户 ' + i); } }
         function editDocTemplate(name) { alert('编辑模板 ' + name); }
         function deleteDocTemplate(name) { alert('删除模板 ' + name); }
+        function editField(i) { alert('编辑字段 ' + i); }
+        function deleteField(i) { alert('删除字段 ' + i); }
         function editWorkflow(i) { alert('编辑流程 ' + i); }
         function deleteWorkflow(i) { alert('删除流程 ' + i); }
         function editSync(i) { alert('编辑同步 ' + i); }
         function deleteSync(i) { alert('删除同步 ' + i); }
-        function editField(i) { alert('编辑字段 ' + i); }
-        function deleteField(i) { alert('删除字段 ' + i); }
         function editDept(i) { alert('编辑部门 ' + i); }
+
+        function openDocTemplateModal() { alert('添加文档模板功能'); }
+        function openFieldModal() { alert('添加字段功能'); }
+        function openWorkflowModal() { alert('添加流转规则功能'); }
+        function openSyncModal() { alert('添加同步规则功能'); }
 
         // 初始化
         loadDashboard();
