@@ -48,18 +48,6 @@
             font-weight: 600;
         }
 
-        .nav-menu {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-
-        .nav-menu a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
         .content-wrapper {
             margin-top: 100px;
             padding: 30px;
@@ -169,6 +157,13 @@
             color: #667eea;
         }
 
+        .documents-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
         .documents-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -177,16 +172,17 @@
 
         .doc-card {
             background: white;
+            border: 2px solid #e0e0e0;
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             cursor: pointer;
         }
 
         .doc-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            transform: translateY(-3px);
         }
 
         .doc-icon {
@@ -237,6 +233,11 @@
 
         .btn:hover {
             transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
         }
 
         .modal {
@@ -379,10 +380,6 @@
                 padding: 0 15px;
             }
 
-            .nav-menu {
-                display: none;
-            }
-
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -396,10 +393,6 @@
             <a href="index.html" class="back-link">← 返回首页</a>
             📊 项目部智能体
         </div>
-        <ul class="nav-menu">
-            <li><a href="index.html">首页</a></li>
-            <li><a href="admin.html">管理后台</a></li>
-        </ul>
     </nav>
 
     <!-- 内容区域 -->
@@ -413,7 +406,7 @@
         <!-- 项目流程 -->
         <div class="workflow-section">
             <div class="section-title">
-                📊 项目流程
+                📊 项目流转流程
             </div>
             <div class="workflow-stages" id="workflowStages">
                 <div class="stage-item" data-stage="立项">
@@ -448,9 +441,9 @@
         </div>
 
         <!-- 项目文档 -->
-        <div class="workflow-section">
+        <div class="documents-section">
             <div class="section-title">
-                📄 项目文档
+                📄 项目部文档（8 份）
             </div>
             <div class="documents-grid" id="documentsGrid">
                 <!-- 文档卡片将通过 JavaScript 动态加载 -->
@@ -458,11 +451,11 @@
         </div>
     </div>
 
-    <!-- 文档生成模态框 -->
+    <!-- 文档填写模态框 -->
     <div class="modal" id="docModal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" id="modalTitle">生成文档</div>
+                <div class="modal-title" id="modalTitle">填写文档</div>
                 <button class="modal-close" onclick="closeModal()">×</button>
             </div>
             <div class="modal-body">
@@ -478,7 +471,7 @@
     </div>
 
     <script>
-        // 文档模板配置
+        // 文档模板配置（基于项目文档分析结果）
         const documentTemplates = {
             '立项书': {
                 icon: '📋',
@@ -680,7 +673,7 @@
                         <div class="doc-desc">${docConfig.desc}</div>
                         <div class="doc-meta">
                             <span>${docConfig.fields.length} 个字段</span>
-                            <button class="btn" style="padding: 6px 12px; font-size: 12px;">填写</button>
+                            <button class="btn btn-sm">填写</button>
                         </div>
                     </div>
                 `;
@@ -689,7 +682,7 @@
             container.innerHTML = html;
         }
 
-        // 打开文档生成模态框
+        // 打开文档填写模态框
         function openDocModal(docName) {
             const docConfig = documentTemplates[docName];
             document.getElementById('modalTitle').textContent = '填写：' + docName;
