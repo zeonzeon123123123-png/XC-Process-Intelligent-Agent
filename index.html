@@ -134,8 +134,8 @@
             font-size: 40px;
         }
 
-        .dept-card:nth-child(1) .dept-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .dept-card:nth-child(2) .dept-icon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .dept-card:nth-child(1) .dept-icon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .dept-card:nth-child(2) .dept-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .dept-card:nth-child(3) .dept-icon { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
         .dept-card:nth-child(4) .dept-icon { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
         .dept-card:nth-child(5) .dept-icon { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
@@ -153,12 +153,11 @@
             line-height: 1.6;
         }
 
-        .new-project-section {
+        .my-projects-section {
             background: white;
             border-radius: 16px;
             padding: 35px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            margin-bottom: 50px;
         }
 
         .section-title {
@@ -166,77 +165,6 @@
             font-weight: 700;
             color: #333;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .project-trigger {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 25px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .btn {
-            padding: 14px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #666 0%, #999 100%);
-        }
-
-        .my-projects-section {
-            background: white;
-            border-radius: 16px;
-            padding: 35px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         .project-list {
@@ -285,30 +213,6 @@
         .stage-PVT { background: #fff8e1; color: #ff8f00; }
         .stage-MP { background: #e0f7fa; color: #00838f; }
 
-        .project-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-
-        .btn-view {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .btn-admin {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-
         @media (max-width: 768px) {
             .navbar {
                 padding: 0 15px;
@@ -339,6 +243,7 @@
                 <div style="font-weight: 600; color: #333;" id="navUsername">Admin</div>
                 <div style="font-size: 12px; color: #666;" id="navRole">管理员</div>
             </div>
+            <button onclick="logout()" style="margin-left: 10px; padding: 8px 16px; background: #ffebee; color: #c62828; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">退出</button>
         </div>
     </nav>
 
@@ -383,49 +288,6 @@
             </a>
         </div>
 
-        <!-- 新建项目 -->
-        <div class="new-project-section">
-            <div class="section-title">
-                🆕 创建新项目
-            </div>
-            <div class="project-trigger">
-                <form id="newProjectForm">
-                    <div class="form-group">
-                        <label>项目名称 *</label>
-                        <input type="text" id="projectName" required placeholder="请输入项目名称">
-                    </div>
-                    <div class="form-group">
-                        <label>项目类型 *</label>
-                        <select id="projectType" required>
-                            <option value="">请选择项目类型</option>
-                            <option value="P0">P0 - 全新芯片平台、全新应用品类</option>
-                            <option value="P1">P1 - 现有芯片平台基础上开发新产品形态</option>
-                            <option value="P2">P2 - 原有项目基础做衍生迭代</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>项目描述 / PRD 内容</label>
-                        <textarea id="projectDesc" placeholder="请输入项目描述或粘贴 PRD 内容..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>上传文档（PRD、项目提案等）</label>
-                        <input type="file" id="projectFile" accept=".pdf,.doc,.docx,.txt,.md">
-                    </div>
-                    <div class="form-group">
-                        <label>负责部门</label>
-                        <select id="leadDepartment">
-                            <option value="项目部">项目部</option>
-                            <option value="产品部">产品部</option>
-                            <option value="硬件部">硬件部</option>
-                            <option value="软件部">软件部</option>
-                            <option value="结构部">结构部</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn">创建项目</button>
-                </form>
-            </div>
-        </div>
-
         <!-- 我的项目 -->
         <div class="my-projects-section">
             <div class="section-title">
@@ -438,24 +300,13 @@
     </div>
 
     <script>
-        // 初始化数据
-        function initData() {
-            if (!localStorage.getItem('projects')) {
-                localStorage.setItem('projects', JSON.stringify([]));
-            }
-            if (!localStorage.getItem('currentUser')) {
-                localStorage.setItem('currentUser', JSON.stringify({
-                    username: 'admin',
-                    role: 'admin',
-                    department: '管理层',
-                    position: '系统管理员'
-                }));
-            }
-        }
-
         // 加载用户信息
         function loadUserInfo() {
             const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
             document.getElementById('navUsername').textContent = user.username;
             document.getElementById('navRole').textContent = user.role === 'admin' ? '管理员' : user.position;
             document.getElementById('navAvatar').textContent = user.username.charAt(0).toUpperCase();
@@ -463,11 +314,11 @@
 
         // 加载项目列表
         function loadProjects() {
-            const projects = JSON.parse(localStorage.getItem('projects'));
+            const projects = JSON.parse(localStorage.getItem('projects') || '[]');
             const container = document.getElementById('projectList');
 
             if (projects.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #999; padding: 40px;">暂无项目，请创建新项目</div>';
+                container.innerHTML = '<div style="text-align: center; color: #999; padding: 40px;">暂无项目，请点击部门智能体创建新项目</div>';
                 return;
             }
 
@@ -480,8 +331,8 @@
                             <span class="project-stage stage-${project.stage}">${project.stage}</span>
                             <span style="margin-left: 10px; color: #666; font-size: 13px;">${project.department} | ${new Date(project.created).toLocaleDateString('zh-CN')}</span>
                         </div>
-                        <div class="project-actions">
-                            <button class="action-btn btn-view" onclick="event.stopPropagation(); viewProject('${project.id}')">查看</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn" style="padding: 8px 16px; font-size: 13px;" onclick="event.stopPropagation(); viewProject('${project.id}')">查看</button>
                         </div>
                     </div>
                 `;
@@ -490,45 +341,19 @@
             container.innerHTML = html;
         }
 
-        // 创建新项目
-        document.getElementById('newProjectForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const project = {
-                id: 'PRJ-' + Date.now(),
-                name: document.getElementById('projectName').value,
-                type: document.getElementById('projectType').value,
-                description: document.getElementById('projectDesc').value,
-                department: document.getElementById('leadDepartment').value,
-                stage: '立项',
-                created: new Date().toISOString(),
-                updated: new Date().toISOString(),
-                documents: [],
-                workflow: {
-                    currentStage: '立项',
-                    stages: ['立项', '规划', '设计', 'EVT', 'DVT', 'PVT', 'MP']
-                }
-            };
-
-            const projects = JSON.parse(localStorage.getItem('projects'));
-            projects.unshift(project);
-            localStorage.setItem('projects', JSON.stringify(projects));
-
-            alert('项目创建成功！');
-            this.reset();
-            loadProjects();
-        });
-
         // 查看项目
         function viewProject(projectId) {
-            // 将项目 ID 存储到 sessionStorage，然后在项目详情页读取
             sessionStorage.setItem('currentProjectId', projectId);
-            // 跳转到项目部智能体页面
             window.location.href = 'project-agent.html?project=' + projectId;
         }
 
+        // 退出登录
+        function logout() {
+            localStorage.setItem('currentUser', '');
+            window.location.href = 'login.html';
+        }
+
         // 初始化
-        initData();
         loadUserInfo();
         loadProjects();
     </script>
