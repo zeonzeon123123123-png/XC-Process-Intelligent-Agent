@@ -359,8 +359,8 @@
                     <li><a href="#" onclick="showSection('users', this)">👥 用户管理</a></li>
                     <li><a href="#" onclick="showSection('documents', this)">📄 文档模板管理</a></li>
                     <li><a href="#" onclick="showSection('fields', this)">📝 字段管理</a></li>
-                    <li><a href="#" onclick="showSection('workflow', this)">🔄 流转规则</a></li>
-                    <li><a href="#" onclick="showSection('sync', this)">🔗 同步规则</a></li>
+                    <li><a href="#" onclick="showSection('workflow', this)">🔄 流转规则管理</a></li>
+                    <li><a href="#" onclick="showSection('sync', this)">🔗 同步规则管理</a></li>
                     <li><a href="#" onclick="showSection('departments', this)">🏢 部门管理</a></li>
                 </ul>
             </div>
@@ -456,9 +456,10 @@
                     </div>
                 </div>
 
-                <!-- 流转规则 -->
+                <!-- 流转规则管理 -->
                 <div id="workflow" class="config-section">
                     <h2 class="section-title">🔄 流转规则管理</h2>
+                    <p style="color: #666; margin-bottom: 20px;">配置项目从一个阶段流转到下一个阶段的条件和规则</p>
                     <div class="action-bar">
                         <button class="btn" onclick="openWorkflowModal()">+ 添加流转规则</button>
                     </div>
@@ -469,7 +470,7 @@
                                     <th>规则名称</th>
                                     <th>源阶段</th>
                                     <th>目标阶段</th>
-                                    <th>条件</th>
+                                    <th>流转条件</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -478,9 +479,10 @@
                     </div>
                 </div>
 
-                <!-- 同步规则 -->
+                <!-- 同步规则管理 -->
                 <div id="sync" class="config-section">
                     <h2 class="section-title">🔗 同步规则管理</h2>
+                    <p style="color: #666; margin-bottom: 20px;">配置文档之间字段的自动同步规则</p>
                     <div class="action-bar">
                         <button class="btn" onclick="openSyncModal()">+ 添加同步规则</button>
                     </div>
@@ -837,17 +839,17 @@
             }
         }
 
-        // 编辑删除函数（简化版）
+        // 编辑删除函数
         function editUser(i) { alert('编辑用户 ' + i); }
         function deleteUser(i) { if(confirm('确定删除？')) { alert('删除用户 ' + i); } }
         function editDocTemplate(name) { alert('编辑模板 ' + name); }
         function deleteDocTemplate(name) { alert('删除模板 ' + name); }
         function editField(i) { alert('编辑字段 ' + i); }
         function deleteField(i) { alert('删除字段 ' + i); }
-        function editWorkflow(i) { alert('编辑流程 ' + i); }
-        function deleteWorkflow(i) { alert('删除流程 ' + i); }
-        function editSync(i) { alert('编辑同步 ' + i); }
-        function deleteSync(i) { alert('删除同步 ' + i); }
+        function editWorkflow(i) { alert('编辑流转规则 ' + i); }
+        function deleteWorkflow(i) { alert('删除流转规则 ' + i); }
+        function editSync(i) { alert('编辑同步规则 ' + i); }
+        function deleteSync(i) { alert('删除同步规则 ' + i); }
         function editDept(i) { alert('编辑部门 ' + i); }
 
         function openDocTemplateModal() { alert('添加文档模板功能'); }
