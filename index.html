@@ -48,12 +48,6 @@
             color: #333;
             text-decoration: none;
             font-weight: 500;
-            padding: 10px 0;
-            transition: color 0.3s;
-        }
-
-        .nav-menu a:hover {
-            color: #667eea;
         }
 
         .user-info {
@@ -85,7 +79,7 @@
         .welcome-section {
             text-align: center;
             color: white;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         .welcome-section h1 {
@@ -94,16 +88,11 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        .welcome-section p {
-            font-size: 18px;
-            opacity: 0.95;
-        }
-
         .departments-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         .dept-card {
@@ -153,11 +142,12 @@
             line-height: 1.6;
         }
 
-        .my-projects-section {
+        .new-project-section {
             background: white;
             border-radius: 16px;
             padding: 35px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 40px;
         }
 
         .section-title {
@@ -165,6 +155,61 @@
             font-weight: 700;
             color: #333;
             margin-bottom: 20px;
+        }
+
+        .project-trigger {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .my-projects-section {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         .project-list {
@@ -286,6 +331,49 @@
             </a>
         </div>
 
+        <!-- 新建项目（项目触发） -->
+        <div class="new-project-section">
+            <div class="section-title">
+                🆕 创建新项目（项目触发）
+            </div>
+            <div class="project-trigger">
+                <form id="newProjectForm">
+                    <div class="form-group">
+                        <label>项目名称 *</label>
+                        <input type="text" id="projectName" required placeholder="请输入项目名称">
+                    </div>
+                    <div class="form-group">
+                        <label>项目类型 *</label>
+                        <select id="projectType" required>
+                            <option value="">请选择项目类型</option>
+                            <option value="P0">P0 - 全新芯片平台、全新应用品类</option>
+                            <option value="P1">P1 - 现有芯片平台基础上开发新产品形态</option>
+                            <option value="P2">P2 - 原有项目基础做衍生迭代</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>项目描述 / PRD 内容</label>
+                        <textarea id="projectDesc" placeholder="请输入项目描述或粘贴 PRD 内容..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>上传文档（PRD、项目提案等）</label>
+                        <input type="file" id="projectFile" accept=".pdf,.doc,.docx,.txt,.md">
+                    </div>
+                    <div class="form-group">
+                        <label>负责部门</label>
+                        <select id="leadDepartment">
+                            <option value="项目部">项目部</option>
+                            <option value="产品部">产品部</option>
+                            <option value="硬件部">硬件部</option>
+                            <option value="软件部">软件部</option>
+                            <option value="结构部">结构部</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">创建项目</button>
+                </form>
+            </div>
+        </div>
+
         <!-- 我的项目 -->
         <div class="my-projects-section">
             <div class="section-title">
@@ -316,7 +404,7 @@
             const container = document.getElementById('projectList');
 
             if (projects.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #999; padding: 40px;">暂无项目，请点击部门智能体创建新项目</div>';
+                container.innerHTML = '<div style="text-align: center; color: #999; padding: 40px;">暂无项目，请创建新项目</div>';
                 return;
             }
 
@@ -338,6 +426,35 @@
 
             container.innerHTML = html;
         }
+
+        // 创建新项目
+        document.getElementById('newProjectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const project = {
+                id: 'PRJ-' + Date.now(),
+                name: document.getElementById('projectName').value,
+                type: document.getElementById('projectType').value,
+                description: document.getElementById('projectDesc').value,
+                department: document.getElementById('leadDepartment').value,
+                stage: '立项',
+                created: new Date().toISOString(),
+                updated: new Date().toISOString(),
+                documents: [],
+                workflow: {
+                    currentStage: '立项',
+                    stages: ['立项', '规划', '设计', 'EVT', 'DVT', 'PVT', 'MP']
+                }
+            };
+
+            const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+            projects.unshift(project);
+            localStorage.setItem('projects', JSON.stringify(projects));
+
+            alert('项目创建成功！');
+            this.reset();
+            loadProjects();
+        });
 
         // 查看项目
         function viewProject(projectId) {
