@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结构部智能体 - XC 智能体系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f6f7;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background: #0066ff;
+            color: white;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            color: #0066ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 主内容区 */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* 页面标题 */
+        .page-header {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 12px;
+        }
+
+        .page-desc {
+            color: #8f959e;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 功能卡片 */
+        .function-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .function-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .function-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .function-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .function-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .function-desc {
+            font-size: 13px;
+            color: #8f959e;
+            line-height: 1.5;
+        }
+
+        /* 内容区域 */
+        .content-section {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e6eb;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #0066ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052cc;
+        }
+
+        .btn-secondary {
+            background: #f5f6f7;
+            color: #646a73;
+            border: 1px solid #e5e6eb;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e6eb;
+        }
+
+        .btn-success {
+            background: #00b365;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f53f3f;
+            color: white;
+        }
+
+        /* 表单 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #0066ff;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        /* 表格 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e6eb;
+        }
+
+        .data-table th {
+            background: #f5f6f7;
+            font-weight: 600;
+            font-size: 13px;
+            color: #646a73;
+        }
+
+        .data-table tr:hover {
+            background: #f5f6f7;
+        }
+
+        /* 权限提示 */
+        .permission-alert {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .permission-alert-icon {
+            font-size: 20px;
+        }
+
+        .permission-alert-text {
+            color: #d48806;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 字段管理 */
+        .field-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .field-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .field-type {
+            padding: 4px 12px;
+            background: #f2f3f5;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #646a73;
+        }
+
+        .field-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .field-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">🏗️ 结构部智能体</div>
+            <nav class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="contacts.html">通讯录</a>
+                <a href="token-stats.html">Token 统计</a>
+                <a href="project-agent.html">智能体</a>
+                <a href="admin.html" id="adminLink" style="display:none;">管理后台</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">用户</span>
+            </div>
+            <button onclick="logout()" style="background:none;border:none;color:white;cursor:pointer;">退出</button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <div class="main-container">
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1 class="page-title">🏗️ 结构部智能体</h1>
+            <p class="page-desc">提供 ID 设计管理、结构设计、模具管理、手板管理、包装设计等全流程智能服务</p>
+        </div>
+
+        <!-- 权限提示（仅非管理员显示） -->
+        <div class="permission-alert" id="permissionAlert">
+            <span class="permission-alert-icon">ℹ️</span>
+            <span class="permission-alert-text">您使用的是标准版本，如需自定义字段请联系管理员</span>
+        </div>
+
+        <!-- 功能卡片 -->
+        <div class="function-grid">
+            <div class="function-card" onclick="showSection('id-design')">
+                <div class="function-icon">🎨</div>
+                <div class="function-name">ID 设计管理</div>
+                <div class="function-desc">ID 方案设计、渲染图管理、CMF 方案、评审流程</div>
+            </div>
+            <div class="function-card" onclick="showSection('structure-design')">
+                <div class="function-icon">🏗️</div>
+                <div class="function-name">结构设计</div>
+                <div class="function-desc">3D 建模、2D 图纸、DFM 分析、结构评审</div>
+            </div>
+            <div class="function-card" onclick="showSection('mold-management')">
+                <div class="function-icon">🔩</div>
+                <div class="function-name">模具管理</div>
+                <div class="function-desc">模具开发、试模跟踪、模具验收、寿命管理</div>
+            </div>
+            <div class="function-card" onclick="showSection('prototype-management')">
+                <div class="function-icon">📦</div>
+                <div class="function-name">手板管理</div>
+                <div class="function-desc">手板申请、制作跟踪、手板评审、验证记录</div>
+            </div>
+            <div class="function-card" onclick="showSection('packaging-design')">
+                <div class="function-icon">📦</div>
+                <div class="function-name">包装设计</div>
+                <div class="function-desc">包装方案、包材设计、运输测试、作业指引</div>
+            </div>
+            <div class="function-card" onclick="showSection('field-management')" id="fieldManagementCard" style="display:none;">
+                <div class="function-icon">⚙️</div>
+                <div class="function-name">字段管理</div>
+                <div class="function-desc">自定义字段配置、增删改查（管理员专属）</div>
+            </div>
+        </div>
+
+        <!-- ID 设计管理 -->
+        <section id="id-design-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">🎨 ID 设计管理</h2>
+                <button class="btn btn-primary" onclick="showAddModal('id')">+ 新建 ID 方案</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID 方案 ID</th>
+                        <th>项目名称</th>
+                        <th>设计风格</th>
+                        <th>设计师</th>
+                        <th>评审状态</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="idDesignTable">
+                    <tr>
+                        <td>ID-PRJ-2026-001</td>
+                        <td>智能门锁 V2</td>
+                        <td>简约科技</td>
+                        <td>王设计师</td>
+                        <td><span style="color: #00b365;">已通过</span></td>
+                        <td>2026-03-15</td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 结构设计 -->
+        <section id="structure-design-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">🏗️ 结构设计</h2>
+                <button class="btn btn-primary" onclick="showAddModal('structure')">+ 新建结构版本</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>结构版本号</th>
+                        <th>项目名称</th>
+                        <th>3D 模型版本</th>
+                        <th>2D 图纸版本</th>
+                        <th>设计负责人</th>
+                        <th>设计状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="structureDesignTable">
+                    <tr>
+                        <td>STR-V1.0</td>
+                        <td>智能门锁 V2</td>
+                        <td>3D-V1.2</td>
+                        <td>2D-V1.1</td>
+                        <td>李工程师</td>
+                        <td><span style="color: #0066ff;">设计中</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 模具管理 -->
+        <section id="mold-management-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">🔩 模具管理</h2>
+                <button class="btn btn-primary" onclick="showAddModal('mold')">+ 新建模具记录</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>模具 ID</th>
+                        <th>模具名称</th>
+                        <th>模具类型</th>
+                        <th>供应商</th>
+                        <th>开模日期</th>
+                        <th>模具状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="moldManagementTable">
+                    <tr>
+                        <td>MOLD-PRJ-2026-001</td>
+                        <td>上盖模具</td>
+                        <td>注塑模具</td>
+                        <td>XX 模具厂</td>
+                        <td>2026-03-01</td>
+                        <td><span style="color: #ff7a45;">试模中</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 手板管理 -->
+        <section id="prototype-management-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">📦 手板管理</h2>
+                <button class="btn btn-primary" onclick="showAddModal('prototype')">+ 新建手板申请</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>手板 ID</th>
+                        <th>手板类型</th>
+                        <th>制作数量</th>
+                        <th>供应商</th>
+                        <th>交付日期</th>
+                        <th>手板状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="prototypeManagementTable">
+                    <tr>
+                        <td>PROT-PRJ-2026-001</td>
+                        <td>结构手板</td>
+                        <td>5 套</td>
+                        <td>XX 手板厂</td>
+                        <td>2026-03-20</td>
+                        <td><span style="color: #0066ff;">制作中</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 包装设计 -->
+        <section id="packaging-design-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">📦 包装设计</h2>
+                <button class="btn btn-primary" onclick="showAddModal('packaging')">+ 新建包装方案</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>包装方案 ID</th>
+                        <th>项目名称</th>
+                        <th>包装类型</th>
+                        <th>设计负责人</th>
+                        <th>设计状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="packagingDesignTable">
+                    <tr>
+                        <td>PKG-PRJ-2026-001</td>
+                        <td>智能门锁 V2</td>
+                        <td>彩盒</td>
+                        <td>张设计师</td>
+                        <td><span style="color: #00b365;">已定案</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 字段管理（仅管理员可见） -->
+        <section id="field-management-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">⚙️ 字段管理（管理员专属）</h2>
+            </div>
+            
+            <div class="permission-alert" style="background: #e6f0ff; border-color: #0066ff; color: #0066ff;">
+                <span class="permission-alert-icon">🔒</span>
+                <span class="permission-alert-text">仅管理员可操作此功能</span>
+            </div>
+
+            <div class="form-group">
+                <label>选择管理的数据表</label>
+                <select id="tableSelector" onchange="loadTableFields()">
+                    <option value="id_design">ID 设计方案表</option>
+                    <option value="structure_design">结构设计主表</option>
+                    <option value="mold_management">模具管理表</option>
+                    <option value="prototype_management">手板管理表</option>
+                    <option value="packaging_design">包装设计表</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-primary" onclick="showAddFieldModal()">+ 添加字段</button>
+            </div>
+
+            <div id="fieldsList">
+                <!-- 动态加载字段 -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 当前用户
+        let currentUser = null;
+
+        // 模拟字段配置
+        const fieldConfig = {
+            'id_design': [
+                { id: 'f1', name: 'ID 方案 ID', type: '文本', required: true },
+                { id: 'f2', name: '项目 ID', type: '关联', required: true },
+                { id: 'f3', name: '设计风格', type: '单选', required: true },
+                { id: 'f4', name: '主色调', type: '文本', required: false },
+                { id: 'f5', name: 'CMF 方案', type: '多行文本', required: false },
+                { id: 'f6', name: '设计师', type: '人员', required: true },
+                { id: 'f7', name: '评审状态', type: '单选', required: true }
+            ],
+            'structure_design': [
+                { id: 'f1', name: '结构版本号', type: '文本', required: true },
+                { id: 'f2', name: '项目 ID', type: '关联', required: true },
+                { id: 'f3', name: '3D 模型版本', type: '文本', required: false },
+                { id: 'f4', name: '2D 图纸版本', type: '文本', required: false },
+                { id: 'f5', name: '设计负责人', type: '人员', required: true },
+                { id: 'f6', name: '设计状态', type: '单选', required: true },
+                { id: 'f7', name: '外形尺寸', type: '文本', required: true }
+            ],
+            'mold_management': [
+                { id: 'f1', name: '模具 ID', type: '文本', required: true },
+                { id: 'f2', name: '项目 ID', type: '关联', required: true },
+                { id: 'f3', name: '模具名称', type: '文本', required: true },
+                { id: 'f4', name: '模具类型', type: '单选', required: true },
+                { id: 'f5', name: '模具供应商', type: '文本', required: true },
+                { id: 'f6', name: '开模日期', type: '日期', required: true },
+                { id: 'f7', name: '模具状态', type: '单选', required: true }
+            ]
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            checkPermission();
+        });
+
+        // 加载用户信息
+        function loadUserInfo() {
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('userAvatar').textContent = currentUser.avatar || currentUser.name[0];
+            document.getElementById('userName').textContent = currentUser.name;
+            
+            // 管理员显示管理后台链接
+            if (currentUser.role === 'admin' || currentUser.role === 'ceo' || currentUser.role === 'manager') {
+                document.getElementById('adminLink').style.display = 'block';
+            }
+        }
+
+        // 检查权限
+        function checkPermission() {
+            const isAdmin = currentUser.role === 'admin' || currentUser.role === 'ceo' || currentUser.role === 'manager';
+            
+            if (isAdmin) {
+                // 管理员：隐藏权限提示，显示字段管理卡片
+                document.getElementById('permissionAlert').style.display = 'none';
+                document.getElementById('fieldManagementCard').style.display = 'block';
+            } else {
+                // 非管理员：显示权限提示，隐藏字段管理卡片
+                document.getElementById('permissionAlert').style.display = 'flex';
+                document.getElementById('fieldManagementCard').style.display = 'none';
+            }
+        }
+
+        // 显示区块
+        function showSection(section) {
+            // 隐藏所有区块
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+            
+            // 显示目标区块
+            const target = document.getElementById(section + '-section');
+            if (target) {
+                target.classList.remove('hidden');
+            }
+            
+            // 如果是字段管理，加载字段列表
+            if (section === 'field-management') {
+                loadTableFields();
+            }
+        }
+
+        // 加载表字段
+        function loadTableFields() {
+            const tableId = document.getElementById('tableSelector').value;
+            const fields = fieldConfig[tableId] || [];
+            const container = document.getElementById('fieldsList');
+            
+            if (fields.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #8f959e; padding: 40px;">暂无字段配置</div>';
+                return;
+            }
+            
+            container.innerHTML = fields.map(field => `
+                <div class="field-item">
+                    <span class="field-name">${field.name}</span>
+                    <span class="field-type">${field.type}</span>
+                    ${field.required ? '<span style="color: #f53f3f; font-size: 12px;">必填</span>' : ''}
+                    <div class="field-actions">
+                        <button class="btn btn-secondary" onclick="editField('${field.id}')">编辑</button>
+                        <button class="btn btn-danger" onclick="deleteField('${field.id}')">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 显示添加模态框
+        function showAddModal(type) {
+            alert('新建' + type + '功能演示');
+        }
+
+        // 显示添加字段模态框
+        function showAddFieldModal() {
+            const fieldName = prompt('请输入字段名称：');
+            if (!fieldName) return;
+            
+            const fieldType = prompt('请输入字段类型（文本/数字/日期/单选/多行文本/人员/关联）：', '文本');
+            if (!fieldType) return;
+            
+            const isRequired = confirm('该字段是否必填？\n点击"确定"为必填，"取消"为选填');
+            
+            // 添加新字段
+            const tableId = document.getElementById('tableSelector').value;
+            if (!fieldConfig[tableId]) {
+                fieldConfig[tableId] = [];
+            }
+            
+            fieldConfig[tableId].push({
+                id: 'f' + (fieldConfig[tableId].length + 1),
+                name: fieldName,
+                type: fieldType,
+                required: isRequired
+            });
+            
+            alert('字段添加成功！');
+            loadTableFields();
+        }
+
+        // 编辑字段
+        function editField(fieldId) {
+            alert('编辑字段功能演示：' + fieldId);
+        }
+
+        // 删除字段
+        function deleteField(fieldId) {
+            if (confirm('确定要删除该字段吗？\n此操作不可恢复！')) {
+                const tableId = document.getElementById('tableSelector').value;
+                fieldConfig[tableId] = fieldConfig[tableId].filter(f => f.id !== fieldId);
+                alert('字段已删除');
+                loadTableFields();
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

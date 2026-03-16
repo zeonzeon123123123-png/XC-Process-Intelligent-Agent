@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>项目部智能体 - 研发工作流程智能体</title>
+    <title>智能体中心 - XC 智能体系统</title>
     <style>
         * {
             margin: 0;
@@ -434,17 +434,61 @@
     <nav class="navbar">
         <div class="navbar-brand">
             <a href="index.html" class="back-link">← 返回首页</a>
-            📊 项目部智能体
+            🤖 智能体中心
         </div>
+        <ul class="nav-menu">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="contacts.html">通讯录</a></li>
+            <li><a href="token-stats.html">Token 统计</a></li>
+            <li><a href="project-agent.html" class="active">智能体</a></li>
+            <li><a href="admin.html" class="admin-link" id="adminNavLink">管理后台</a></li>
+        </ul>
     </nav>
 
     <!-- 内容区域 -->
     <div class="content-wrapper">
         <!-- 页面头部 -->
         <div class="page-header">
-            <div class="page-title">项目部智能体</div>
-            <div class="page-desc">项目立项、进度跟踪、文档生成、流程管理</div>
+            <div class="page-title">🤖 智能体中心</div>
+            <div class="page-desc">选择部门智能体开始协作</div>
         </div>
+
+        <!-- 智能体入口 -->
+        <div class="departments-grid" style="margin-top: 30px;">
+            <a href="project-agent.html" class="dept-card">
+                <div class="dept-icon">📋</div>
+                <div class="dept-name">项目部智能体</div>
+                <div class="dept-desc">项目立项、进度跟踪、文档生成、流程管理</div>
+            </a>
+            <a href="product-agent.html" class="dept-card">
+                <div class="dept-icon">📊</div>
+                <div class="dept-name">产品部智能体</div>
+                <div class="dept-desc">产品提案、需求管理、PRD 生成、竞品分析</div>
+            </a>
+            <a href="hardware-agent.html" class="dept-card">
+                <div class="dept-icon">🔧</div>
+                <div class="dept-name">硬件部智能体</div>
+                <div class="dept-desc">原理图设计、PCB 设计、BOM 管理、GPIO 配置</div>
+            </a>
+            <a href="software-agent.html" class="dept-card">
+                <div class="dept-icon">💻</div>
+                <div class="dept-name">软件部智能体</div>
+                <div class="dept-desc">软件架构、接口文档、版本管理、代码审查</div>
+            </a>
+            <a href="structure-agent.html" class="dept-card">
+                <div class="dept-icon">🏗️</div>
+                <div class="dept-name">结构部智能体</div>
+                <div class="dept-desc">ID 设计、结构设计、模具管理、手板管理、包装设计</div>
+            </a>
+            <a href="test-agent.html" class="dept-card">
+                <div class="dept-icon">✅</div>
+                <div class="dept-name">测试部智能体</div>
+                <div class="dept-desc">测试计划、测试用例、缺陷管理、测试报告</div>
+            </a>
+        </div>
+
+        <!-- 原项目部智能体内容 -->
+        <div style="margin-top: 40px; border-top: 2px solid #e5e6eb; padding-top: 30px;">
 
         <!-- 项目流程 -->
         <div class="workflow-section">
@@ -844,6 +888,12 @@
         // 初始化
         loadCurrentProject();
         loadDocuments();
+        
+        // 管理员权限检查
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        if (user && (user.role === 'admin' || user.role === 'ceo' || user.role === 'manager')) {
+            document.getElementById('adminNavLink').classList.add('visible');
+        }
     </script>
 </body>
 </html>
