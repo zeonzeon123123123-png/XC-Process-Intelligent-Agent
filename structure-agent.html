@@ -445,8 +445,11 @@
         <!-- 结构设计 -->
         <section id="structure-design-section" class="content-section hidden">
             <div class="section-header">
-                <h2 class="section-title">🏗️ 结构设计</h2>
-                <button class="btn btn-primary" onclick="showAddModal('structure')">+ 新建结构版本</button>
+                <h2 class="section-title">🏗️ 结构设计与评审</h2>
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="showAddModal('structure')">+ 新建结构版本</button>
+                    <button class="btn btn-secondary" onclick="showStructureChecklistModal()">📋 评审 CheckList</button>
+                </div>
             </div>
             <table class="data-table">
                 <thead>
@@ -456,7 +459,7 @@
                         <th>3D 模型版本</th>
                         <th>2D 图纸版本</th>
                         <th>设计负责人</th>
-                        <th>设计状态</th>
+                        <th>评审状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -467,10 +470,22 @@
                         <td>3D-V1.2</td>
                         <td>2D-V1.1</td>
                         <td>李工程师</td>
-                        <td><span style="color: #0066ff;">设计中</span></td>
+                        <td><span style="color: #00b365;">评审通过</span></td>
                         <td>
-                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
-                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="viewStructure('STR-V1.0')">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="reviewStructure('STR-V1.0')">评审</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>STR-V1.1</td>
+                        <td>智能网关 Pro</td>
+                        <td>3D-V1.0</td>
+                        <td>2D-V1.0</td>
+                        <td>王工程师</td>
+                        <td><span style="color: #ff7a45;">评审中</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="viewStructure('STR-V1.1')">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="reviewStructure('STR-V1.1')">评审</button>
                         </td>
                     </tr>
                 </tbody>
@@ -1142,6 +1157,198 @@
         function submitECN() {
             alert('ECN 变更申请已提交！\n\n变更流程：\n1. 变更申请 → 2. 影响评估 → 3. 样品验证 → 4. 审批 → 5. 实施变更');
             closeECNModal();
+        }
+
+        // 查看结构详情
+        function viewStructure(versionId) {
+            alert('查看结构详情：' + versionId);
+        }
+
+        // 评审结构
+        function reviewStructure(versionId) {
+            showStructureChecklistModal();
+        }
+
+        // 显示结构设计评审 CheckList 模态框
+        function showStructureChecklistModal() {
+            const checklistItems = [
+                { id: 1, content: '前后壳间的美工线/间隙/段差检测，防止刮手', standard: 'GAP≦0.2MM; OFFSET≦0.2MM' },
+                { id: 2, content: '设计必须标识分模线，出模斜度，如对外观影响较大，须同 ID 确认', standard: '' },
+                { id: 3, content: '整机外观无尖锐棱角', standard: '外观 R 尽量做大，有特殊要求做 R0.3mm' },
+                { id: 4, content: '端口插拔线方便，顺畅无干涉，及松紧检测', standard: '' },
+                { id: 5, content: '按键有效作用力，行程检测', standard: '' },
+                { id: 6, content: '整机是否因受外拉力扭力而变形/异响/松脱', standard: '' },
+                { id: 7, content: '外露螺丝颜色检查（深色用发黑，浅色用镀镍或彩锌螺丝）', standard: '' },
+                { id: 8, content: '粘贴的各种脚垫或活动件是否牢固', standard: '' },
+                { id: 13, content: '喇叭孔/散热孔大小检测', standard: '' },
+                { id: 16, content: '螺丝与定位柱大小/类型匹配', standard: '' },
+                { id: 17, content: '螺丝与螺丝柱配合尺寸要求有导斜角易于对位', standard: '' },
+                { id: 18, content: '螺丝孔与定位柱无错位', standard: '' },
+                { id: 20, content: '各塑胶件/五金件无毛边毛刺/尖锐棱角', standard: 'R 尽量做大，最小要求做 R0.3MM' },
+                { id: 21, content: '线材走线合理整洁，要防止被刮伤/压伤/烫伤等危险', standard: '' },
+                { id: 22, content: '线材需要专门的卡扣或束线位置', standard: '' },
+                { id: 23, content: 'PCBA 与结构件间的安全距离检测', standard: '' },
+                { id: 24, content: 'PCBA 元件避位/限高检测', standard: '' },
+                { id: 25, content: '电镀件需要远离 PCB，且应涂油 PCB 面，避免 ESD 测试难通过', standard: '' },
+                { id: 26, content: '应适当增加小屏蔽罩，加强 EMC 电磁干扰测试', standard: '' },
+                { id: 27, content: '塑胶件上是否有环保标识，生产日期，修改版本标识', standard: '' },
+                { id: 28, content: '喇叭孔/散热孔无堵塞或毛边', standard: '' },
+                { id: 30, content: '单件强度应考虑一定破坏/滥用/跌落/振动/高温/高湿等恶劣环境', standard: '' },
+                { id: 31, content: '螺丝类型/数量是否繁多，不利作业', standard: '尽量选用 M1.2*6/M1.4*8/M1.6*6' }
+            ];
+
+            const modalContent = `
+                <div style="padding: 24px;">
+                    <h3 style="margin-bottom: 20px; font-size: 18px;">📋 结构设计评审 CheckList</h3>
+                    
+                    <div style="background: #f5f6f7; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div>
+                                <label style="font-size: 13px;">产品型号</label>
+                                <input type="text" value="XL-V2-2026" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 13px;">产品类别</label>
+                                <input type="text" value="智能硬件" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 13px;">结构工程师</label>
+                                <input type="text" value="李工程师" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 13px;">图档版本</label>
+                                <input type="text" value="A01" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="max-height: 500px; overflow-y: auto; margin-bottom: 20px;">
+                        <table class="data-table" style="font-size: 13px;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">NO.</th>
+                                    <th>确认内容</th>
+                                    <th style="width: 200px;">参考标准</th>
+                                    <th style="width: 80px;">结果</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${checklistItems.map(item => `
+                                    <tr>
+                                        <td>${item.id}</td>
+                                        <td>${item.content}</td>
+                                        <td style="color: #8f959e;">${item.standard || '-'}</td>
+                                        <td>
+                                            <label style="display: flex; align-items: center; gap: 8px;">
+                                                <input type="checkbox" checked>
+                                                <span style="color: #00b365;">√</span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="background: #f5f6f7; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">审核结论</h4>
+                        <div style="display: grid; gap: 12px;">
+                            <div>
+                                <label style="font-size: 13px;">结论</label>
+                                <select style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                    <option value="pass">✅ 符合量产，可行</option>
+                                    <option value="conditional">⚠️ 有条件通过（需整改）</option>
+                                    <option value="fail">❌ 不通过（重新设计）</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size: 13px;">问题记录</label>
+                                <textarea placeholder="如有问题，请详细记录..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; min-height: 80px; font-family: inherit;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f5f6f7; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">审批签字</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                            <div>
+                                <label style="font-size: 13px;">编写</label>
+                                <input type="text" placeholder="编写人" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 13px;">审核</label>
+                                <input type="text" value="刘建飞" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 13px;">批准</label>
+                                <input type="text" placeholder="批准人" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 12px; margin-bottom: 20px;">
+                        <div style="font-size: 13px; color: #d48806; line-height: 1.8;">
+                            <strong>备注：</strong><br>
+                            (1) 本表单适用于初版或结构变动太大时作为检查表单<br>
+                            (2) 本表单用于各部门对结构工程师对结构设计的检查，通过则打"√"；如未通过则继续修改<br>
+                            (3) 结构图档完成后，各部门工程师根据各项要求初检及复检核实后，本表单上交项目管理人收集管理
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end;">
+                        <button class="btn btn-secondary" onclick="closeStructureModal()" style="padding: 10px 24px;">取消</button>
+                        <button class="btn btn-primary" onclick="submitStructureReview()" style="padding: 10px 24px;">提交评审</button>
+                    </div>
+                </div>
+            `;
+            
+            // 创建模态框
+            const modal = document.createElement('div');
+            modal.id = 'structureChecklistModal';
+            modal.className = 'modal active';
+            modal.style.cssText = `
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 2000;
+                align-items: center;
+                justify-content: center;
+                overflow-y: auto;
+                padding: 20px;
+            `;
+            
+            const modalContentDiv = document.createElement('div');
+            modalContentDiv.style.cssText = `
+                background: white;
+                border-radius: 16px;
+                width: 100%;
+                max-width: 1000px;
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 20px 0;
+            `;
+            modalContentDiv.innerHTML = modalContent;
+            
+            modal.appendChild(modalContentDiv);
+            document.body.appendChild(modal);
+        }
+
+        // 关闭结构设计评审模态框
+        function closeStructureModal() {
+            const modal = document.getElementById('structureChecklistModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // 提交结构设计评审
+        function submitStructureReview() {
+            alert('结构设计评审已提交！\n\n评审流程：\n1. 各部门工程师初检 → 2. 复检核实 → 3. 审核签字 → 4. 上交项目管理人');
+            closeStructureModal();
         }
 
         // 退出登录
