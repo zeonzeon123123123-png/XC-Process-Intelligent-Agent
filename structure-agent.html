@@ -550,8 +550,11 @@
         <!-- 包装设计 -->
         <section id="packaging-design-section" class="content-section hidden">
             <div class="section-header">
-                <h2 class="section-title">📦 包装设计</h2>
-                <button class="btn btn-primary" onclick="showAddModal('packaging')">+ 新建包装方案</button>
+                <h2 class="section-title">📦 包装设计评审</h2>
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="showAddModal('packaging')">+ 新建包装方案</button>
+                    <button class="btn btn-secondary" onclick="showChecklistModal()">📋 评审 CheckList</button>
+                </div>
             </div>
             <table class="data-table">
                 <thead>
@@ -560,7 +563,8 @@
                         <th>项目名称</th>
                         <th>包装类型</th>
                         <th>设计负责人</th>
-                        <th>设计状态</th>
+                        <th>评审状态</th>
+                        <th>评审日期</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -570,10 +574,23 @@
                         <td>智能门锁 V2</td>
                         <td>彩盒</td>
                         <td>张设计师</td>
-                        <td><span style="color: #00b365;">已定案</span></td>
+                        <td><span style="color: #00b365;">评审通过</span></td>
+                        <td>2026-03-15</td>
                         <td>
-                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
-                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="viewPackaging('PKG-PRJ-2026-001')">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="reviewPackaging('PKG-PRJ-2026-001')">评审</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PKG-PRJ-2026-002</td>
+                        <td>智能网关 Pro</td>
+                        <td>吸塑</td>
+                        <td>李设计师</td>
+                        <td><span style="color: #ff7a45;">评审中</span></td>
+                        <td>-</td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="viewPackaging('PKG-PRJ-2026-002')">查看</button>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="reviewPackaging('PKG-PRJ-2026-002')">评审</button>
                         </td>
                     </tr>
                 </tbody>
@@ -770,6 +787,164 @@
                 alert('字段已删除');
                 loadTableFields();
             }
+        }
+
+        // 查看包装详情
+        function viewPackaging(pkgId) {
+            alert('查看包装详情：' + pkgId);
+        }
+
+        // 评审包装
+        function reviewPackaging(pkgId) {
+            showChecklistModal();
+        }
+
+        // 显示评审 CheckList 模态框
+        function showChecklistModal() {
+            const modalContent = `
+                <div style="padding: 24px;">
+                    <h3 style="margin-bottom: 20px; font-size: 18px;">📋 包装设计评审 CheckList</h3>
+                    
+                    <div style="display: grid; gap: 16px;">
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">一、基本信息</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div>
+                                    <label style="font-size: 13px;">项目名称</label>
+                                    <input type="text" value="智能门锁 V2" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">产品型号</label>
+                                    <input type="text" value="XL-V2-2026" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">包装类型</label>
+                                    <select style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                        <option>彩盒</option>
+                                        <option>白盒</option>
+                                        <option>吸塑</option>
+                                        <option>定制</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">设计师</label>
+                                    <input type="text" value="张设计师" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">二、包装设计检查项</h4>
+                            <div style="display: grid; gap: 12px;">
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked> 包装尺寸确认（长×宽×高）
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked> 材质选择（符合产品定位）
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 印刷工艺（颜色、图案、LOGO）
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked> 结构设计（内托、固定方式）
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 防护性能（防震、防潮、防静电）
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 运输测试（跌落测试、振动测试）
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked> 成本控制（符合预算）
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 环保要求（可回收材料）
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">三、问题记录</h4>
+                            <textarea placeholder="请输入发现的问题..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; min-height: 100px; font-family: inherit;"></textarea>
+                        </div>
+
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">四、评审结论</h4>
+                            <div style="display: grid; gap: 12px;">
+                                <div>
+                                    <label style="font-size: 13px;">评审结果</label>
+                                    <select style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                        <option value="pass">✅ 评审通过</option>
+                                        <option value="conditional">⚠️ 有条件通过（需整改）</option>
+                                        <option value="fail">❌ 不通过（重新设计）</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">整改要求</label>
+                                    <textarea placeholder="如有整改要求，请详细说明..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; min-height: 80px; font-family: inherit;"></textarea>
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">复审日期</label>
+                                    <input type="date" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end;">
+                        <button class="btn btn-secondary" onclick="closeModal()" style="padding: 10px 24px;">取消</button>
+                        <button class="btn btn-primary" onclick="submitReview()" style="padding: 10px 24px;">提交评审</button>
+                    </div>
+                </div>
+            `;
+            
+            // 创建模态框
+            const modal = document.createElement('div');
+            modal.id = 'checklistModal';
+            modal.className = 'modal active';
+            modal.style.cssText = `
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 2000;
+                align-items: center;
+                justify-content: center;
+                overflow-y: auto;
+                padding: 20px;
+            `;
+            
+            const modalContentDiv = document.createElement('div');
+            modalContentDiv.style.cssText = `
+                background: white;
+                border-radius: 16px;
+                width: 100%;
+                max-width: 800px;
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 20px 0;
+            `;
+            modalContentDiv.innerHTML = modalContent;
+            
+            modal.appendChild(modalContentDiv);
+            document.body.appendChild(modal);
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            const modal = document.getElementById('checklistModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // 提交评审
+        function submitReview() {
+            alert('评审提交成功！');
+            closeModal();
         }
 
         // 退出登录
