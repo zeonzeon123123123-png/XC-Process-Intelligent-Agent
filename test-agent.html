@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试部智能体 - XC 智能体系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f6f7;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background: #0066ff;
+            color: white;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            color: #0066ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 主内容区 */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* 页面标题 */
+        .page-header {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 12px;
+        }
+
+        .page-desc {
+            color: #8f959e;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 功能卡片 */
+        .function-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .function-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .function-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .function-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .function-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .function-desc {
+            font-size: 13px;
+            color: #8f959e;
+            line-height: 1.5;
+        }
+
+        /* 内容区域 */
+        .content-section {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e6eb;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #0066ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052cc;
+        }
+
+        .btn-secondary {
+            background: #f5f6f7;
+            color: #646a73;
+            border: 1px solid #e5e6eb;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e6eb;
+        }
+
+        .btn-success {
+            background: #00b365;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f53f3f;
+            color: white;
+        }
+
+        /* 表格 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e6eb;
+        }
+
+        .data-table th {
+            background: #f5f6f7;
+            font-weight: 600;
+            font-size: 13px;
+            color: #646a73;
+        }
+
+        .data-table tr:hover {
+            background: #f5f6f7;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 状态标签 */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-pass { background: #f6ffed; color: #00b365; }
+        .status-fail { background: #fff2f0; color: #f53f3f; }
+        .status-pending { background: #fff7e6; color: #d48806; }
+        .status-fixing { background: #e6f0ff; color: #0066ff; }
+
+        /* 阶段标签 */
+        .stage-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .stage-evt { background: #e6f0ff; color: #0066ff; }
+        .stage-dvt { background: #f6ffed; color: #00b365; }
+        .stage-pvt { background: #fff7e6; color: #d48806; }
+        .stage-mp { background: #f5f6f7; color: #646a73; }
+
+        /* 问题优先级 */
+        .priority-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .priority-p0 { background: #fff2f0; color: #f53f3f; }
+        .priority-p1 { background: #fff7e6; color: #ff7a45; }
+        .priority-p2 { background: #e6f0ff; color: #0066ff; }
+        .priority-p3 { background: #f5f6f7; color: #8f959e; }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e6eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e6eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* 表单 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #0066ff;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        /* 测试流程 */
+        .test-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: #f5f6f7;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .flow-step:not(:last-child)::after {
+            content: '→';
+            font-size: 20px;
+            color: #8f959e;
+            margin-left: 20px;
+        }
+
+        .flow-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e5e6eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .flow-step.active .flow-icon {
+            background: #0066ff;
+            color: white;
+        }
+
+        .flow-step.completed .flow-icon {
+            background: #00b365;
+            color: white;
+        }
+
+        .flow-label {
+            font-size: 12px;
+            color: #646a73;
+            text-align: center;
+        }
+
+        .flow-step.active .flow-label {
+            color: #0066ff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">✅ 测试部智能体</div>
+            <nav class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="contacts.html">通讯录</a>
+                <a href="token-stats.html">Token 统计</a>
+                <a href="project-agent.html">智能体</a>
+                <a href="interaction-center.html">交互中心</a>
+                <a href="admin.html" id="adminLink" style="display:none;">管理后台</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">用户</span>
+            </div>
+            <button onclick="logout()" style="background:none;border:none;color:white;cursor:pointer;">退出</button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <div class="main-container">
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1 class="page-title">✅ 测试部智能体</h1>
+            <p class="page-desc">基于 PRD 的测试需求管理、EVT/DVT/PVT/MP 全阶段测试、问题闭环跟踪</p>
+        </div>
+
+        <!-- 测试流程图 -->
+        <div class="test-flow">
+            <div class="flow-step completed">
+                <div class="flow-icon">📄</div>
+                <div class="flow-label">PRD 需求</div>
+            </div>
+            <div class="flow-step completed">
+                <div class="flow-icon">📋</div>
+                <div class="flow-label">测试计划</div>
+            </div>
+            <div class="flow-step active">
+                <div class="flow-icon">✅</div>
+                <div class="flow-label">测试执行</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-icon">🐛</div>
+                <div class="flow-label">问题提报</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-icon">🔧</div>
+                <div class="flow-label">部门修复</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-icon">🔄</div>
+                <div class="flow-label">回归测试</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-icon">📊</div>
+                <div class="flow-label">阶段评审</div>
+            </div>
+        </div>
+
+        <!-- 功能卡片 -->
+        <div class="function-grid">
+            <div class="function-card" onclick="showSection('test-requirements')">
+                <div class="function-icon">📋</div>
+                <div class="function-name">测试需求</div>
+                <div class="function-desc">从 PRD 自动导入测试需求</div>
+            </div>
+            <div class="function-card" onclick="showSection('test-plan')">
+                <div class="function-icon">📝</div>
+                <div class="function-name">测试计划</div>
+                <div class="function-desc">EVT/DVT/PVT/MP测试计划</div>
+            </div>
+            <div class="function-card" onclick="showSection('test-execution')">
+                <div class="function-icon">✅</div>
+                <div class="function-name">测试执行</div>
+                <div class="function-desc">测试用例执行、结果记录</div>
+            </div>
+            <div class="function-card" onclick="showSection('issue-report')">
+                <div class="function-icon">🐛</div>
+                <div class="function-name">问题提报</div>
+                <div class="function-desc">问题分派、超时预警</div>
+            </div>
+            <div class="function-card" onclick="showSection('regression-test')">
+                <div class="function-icon">🔄</div>
+                <div class="function-name">回归测试</div>
+                <div class="function-desc">修复验证、闭环跟踪</div>
+            </div>
+            <div class="function-card" onclick="showSection('stage-review')">
+                <div class="function-icon">📊</div>
+                <div class="function-name">阶段评审</div>
+                <div class="function-desc">EVT/DVT/PVT/MP 评审</div>
+            </div>
+        </div>
+
+        <!-- 测试需求 -->
+        <section id="test-requirements-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">📋 测试需求（来源于 PRD）</h2>
+                <button class="btn btn-primary" onclick="syncPRDRequirements()">🔄 同步 PRD 需求</button>
+            </div>
+            
+            <div style="background: #e6f0ff; border: 1px solid #0066ff; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: start; gap: 12px;">
+                    <span style="font-size: 20px;">ℹ️</span>
+                    <div>
+                        <div style="font-weight: 600; color: #0066ff; margin-bottom: 8px;">测试需求来源说明</div>
+                        <div style="font-size: 13px; color: #646a73; line-height: 1.6;">
+                            测试需求自动从 PRD 导入，包括：<br>
+                            • 功能需求 → 功能测试用例<br>
+                            • 性能需求 → 性能测试用例<br>
+                            • 接口需求 → 接口测试用例<br>
+                            • 可靠性需求 → 可靠性测试用例
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>需求 ID</th>
+                        <th>需求描述</th>
+                        <th>来源 PRD</th>
+                        <th>测试类型</th>
+                        <th>优先级</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="testRequirementsTable">
+                    <tr>
+                        <td>TR-2026-001</td>
+                        <td>实现设备配网功能</td>
+                        <td>PRD-2026-001</td>
+                        <td><span class="status-badge status-pass">功能测试</span></td>
+                        <td><span class="priority-badge priority-p0">P0</span></td>
+                        <td><span class="status-badge status-pass">已导入</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>TR-2026-002</td>
+                        <td>实现蓝牙通信协议</td>
+                        <td>PRD-2026-001</td>
+                        <td><span class="status-badge status-pass">功能测试</span></td>
+                        <td><span class="priority-badge priority-p1">P1</span></td>
+                        <td><span class="status-badge status-pass">已导入</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>TR-2026-003</td>
+                        <td>响应时间≤500ms</td>
+                        <td>PRD-2026-001</td>
+                        <td><span class="status-badge status-pending">性能测试</span></td>
+                        <td><span class="priority-badge priority-p1">P1</span></td>
+                        <td><span class="status-badge status-pass">已导入</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 测试计划 -->
+        <section id="test-plan-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">📝 测试计划</h2>
+                <button class="btn btn-primary" onclick="showAddModal('plan')">+ 新建测试计划</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>计划 ID</th>
+                        <th>项目名称</th>
+                        <th>测试阶段</th>
+                        <th>测试用例数</th>
+                        <th>计划开始</th>
+                        <th>计划结束</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="testPlanTable">
+                    <tr>
+                        <td>TP-2026-001</td>
+                        <td>智能门锁 V2</td>
+                        <td><span class="stage-badge stage-evt">EVT</span></td>
+                        <td>45</td>
+                        <td>2026-03-15</td>
+                        <td>2026-03-25</td>
+                        <td><span class="status-badge status-pending">进行中</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>TP-2026-002</td>
+                        <td>智能门锁 V2</td>
+                        <td><span class="stage-badge stage-dvt">DVT</span></td>
+                        <td>68</td>
+                        <td>2026-04-01</td>
+                        <td>2026-04-15</td>
+                        <td><span class="status-badge status-pending">未开始</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">查看</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 测试执行 -->
+        <section id="test-execution-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">✅ 测试执行</h2>
+                <button class="btn btn-primary" onclick="showAddModal('execution')">+ 记录测试结果</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>用例 ID</th>
+                        <th>用例名称</th>
+                        <th>测试阶段</th>
+                        <th>测试结果</th>
+                        <th>测试人</th>
+                        <th>测试日期</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="testExecutionTable">
+                    <tr>
+                        <td>TC-2026-001</td>
+                        <td>设备配网功能测试</td>
+                        <td><span class="stage-badge stage-evt">EVT</span></td>
+                        <td><span class="status-badge status-pass">通过</span></td>
+                        <td>测试工程师 A</td>
+                        <td>2026-03-16</td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">详情</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>TC-2026-002</td>
+                        <td>蓝牙连接超时测试</td>
+                        <td><span class="stage-badge stage-evt">EVT</span></td>
+                        <td><span class="status-badge status-fail">失败</span></td>
+                        <td>测试工程师 B</td>
+                        <td>2026-03-16</td>
+                        <td>
+                            <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="showIssueReportModal('TC-2026-002')">提报问题</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 问题提报 -->
+        <section id="issue-report-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">🐛 问题提报与跟踪</h2>
+                <button class="btn btn-primary" onclick="showIssueReportModal()">+ 提报问题</button>
+            </div>
+
+            <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: start; gap: 12px;">
+                    <span style="font-size: 20px;">⏰</span>
+                    <div>
+                        <div style="font-weight: 600; color: #d48806; margin-bottom: 8px;">问题响应时限</div>
+                        <div style="font-size: 13px; color: #646a73; line-height: 1.6;">
+                            • P0 致命问题：2 小时内响应，24 小时内解决<br>
+                            • P1 严重问题：4 小时内响应，3 天内解决<br>
+                            • P2 一般问题：1 天内响应，1 周内解决<br>
+                            • P3 建议问题：3 天内响应，迭代版本解决
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>问题 ID</th>
+                        <th>问题描述</th>
+                        <th>严重级别</th>
+                        <th>责任部门</th>
+                        <th>责任人</th>
+                        <th>提报日期</th>
+                        <th>截止日期</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="issueReportTable">
+                    <tr>
+                        <td>BUG-2026-015</td>
+                        <td>蓝牙连接超时问题</td>
+                        <td><span class="priority-badge priority-p1">P1</span></td>
+                        <td>💻 软件部</td>
+                        <td>张经理</td>
+                        <td>2026-03-14</td>
+                        <td style="color: #f53f3f; font-weight: 600;">2026-03-17</td>
+                        <td><span class="status-badge status-fixing">修复中</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">跟踪</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BUG-2026-016</td>
+                        <td>外壳间隙超标</td>
+                        <td><span class="priority-badge priority-p2">P2</span></td>
+                        <td>🏗️ 结构部</td>
+                        <td>李经理</td>
+                        <td>2026-03-15</td>
+                        <td>2026-03-22</td>
+                        <td><span class="status-badge status-pending">待修复</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">跟踪</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BUG-2026-017</td>
+                        <td>PCB 焊盘偏移</td>
+                        <td><span class="priority-badge priority-p1">P1</span></td>
+                        <td>🔧 硬件部</td>
+                        <td>王经理</td>
+                        <td>2026-03-13</td>
+                        <td>2026-03-16</td>
+                        <td><span class="status-badge status-pass">已修复</span></td>
+                        <td>
+                            <button class="btn btn-success" style="padding: 6px 12px; font-size: 12px;" onclick="showRegressionTestModal('BUG-2026-017')">回归测试</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 回归测试 -->
+        <section id="regression-test-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">🔄 回归测试</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>回归 ID</th>
+                        <th>问题 ID</th>
+                        <th>问题描述</th>
+                        <th>责任部门</th>
+                        <th>修复版本</th>
+                        <th>回归结果</th>
+                        <th>回归日期</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="regressionTestTable">
+                    <tr>
+                        <td>RT-2026-001</td>
+                        <td>BUG-2026-017</td>
+                        <td>PCB 焊盘偏移</td>
+                        <td>🔧 硬件部</td>
+                        <td>PCB-V1.1</td>
+                        <td><span class="status-badge status-pending">待测试</span></td>
+                        <td>-</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="executeRegressionTest('RT-2026-001')">执行测试</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>RT-2026-002</td>
+                        <td>BUG-2026-010</td>
+                        <td>按键无反馈</td>
+                        <td>💻 软件部</td>
+                        <td>FW-V1.2</td>
+                        <td><span class="status-badge status-pass">通过</span></td>
+                        <td>2026-03-15</td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">详情</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 阶段评审 -->
+        <section id="stage-review-section" class="content-section hidden">
+            <div class="section-header">
+                <h2 class="section-title">📊 阶段评审</h2>
+            </div>
+
+            <div style="background: #f6ffed; border: 1px solid #00b365; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+                <div style="font-weight: 600; color: #00b365; margin-bottom: 8px;">✅ 阶段转换条件</div>
+                <div style="font-size: 13px; color: #646a73; line-height: 1.8;">
+                    <strong>EVT→DVT:</strong> EVT 评审通过 + 无 P0/P1 开放问题 + 硬件设计定型 + 软件版本稳定<br>
+                    <strong>DVT→PVT:</strong> DVT 评审通过 + 模具验收完成 + 无 P0 开放问题<br>
+                    <strong>PVT→MP:</strong> PVT 评审通过 + 软硬件稳定 + 直通率达标 + 遗留问题满足质量要求
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>项目</th>
+                        <th>当前阶段</th>
+                        <th>测试通过率</th>
+                        <th>开放问题</th>
+                        <th>P0/P1 问题</th>
+                        <th>评审状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="stageReviewTable">
+                    <tr>
+                        <td>智能门锁 V2</td>
+                        <td><span class="stage-badge stage-evt">EVT</span></td>
+                        <td><span style="color: #00b365; font-weight: 600;">92%</span></td>
+                        <td>3</td>
+                        <td><span style="color: #f53f3f; font-weight: 600;">1</span></td>
+                        <td><span class="status-badge status-pending">待评审</span></td>
+                        <td>
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" disabled>不满足条件</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>智能网关 Pro</td>
+                        <td><span class="stage-badge stage-dvt">DVT</span></td>
+                        <td><span style="color: #00b365; font-weight: 600;">98%</span></td>
+                        <td>0</td>
+                        <td><span style="color: #00b365; font-weight: 600;">0</span></td>
+                        <td><span class="status-badge status-pass">评审通过</span></td>
+                        <td>
+                            <button class="btn btn-success" style="padding: 6px 12px; font-size: 12px;" onclick="approveStageTransition('智能网关 Pro', 'DVT', 'PVT')">批准进入 PVT</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- 问题提报模态框 -->
+    <div id="issueReportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🐛 问题提报</h3>
+                <button onclick="closeIssueReportModal()" style="background:none;border:none;font-size:24px;cursor:pointer;">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>问题来源 <span style="color: #f53f3f;">*</span></label>
+                    <select id="issueSource" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px;">
+                        <option value="">请选择</option>
+                        <option value="test-execution">测试执行</option>
+                        <option value="manual-report">手动提报</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>关联测试用例</label>
+                    <input type="text" id="relatedTestCase" placeholder="如：TC-2026-002" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px;">
+                </div>
+
+                <div class="form-group">
+                    <label>问题描述 <span style="color: #f53f3f;">*</span></label>
+                    <textarea id="issueDescription" placeholder="详细描述问题现象、复现步骤、预期结果等..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px; min-height: 120px;"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>严重级别 <span style="color: #f53f3f;">*</span></label>
+                        <select id="issuePriority" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px;">
+                            <option value="P0">P0 - 致命（阻塞测试，无法继续）</option>
+                            <option value="P1">P1 - 严重（主要功能异常）</option>
+                            <option value="P2">P2 - 一般（次要功能异常）</option>
+                            <option value="P3">P3 - 建议（优化建议）</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>责任部门 <span style="color: #f53f3f;">*</span></label>
+                        <select id="responsibleDept" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px;" onchange="updateManagerList()">
+                            <option value="">请选择</option>
+                            <option value="software">💻 软件部</option>
+                            <option value="hardware">🔧 硬件部</option>
+                            <option value="structure">🏗️ 结构部</option>
+                            <option value="product">📊 产品部</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>责任人 <span style="color: #f53f3f;">*</span></label>
+                    <select id="responsibleManager" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px;">
+                        <option value="">请先选择责任部门</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>期望解决日期 <span style="color: #f53f3f;">*</span></label>
+                        <input type="date" id="expectedDate" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px;">
+                    </div>
+                    <div class="form-group">
+                        <label>测试阶段</label>
+                        <select id="testStage" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px;">
+                            <option value="EVT">EVT</option>
+                            <option value="DVT">DVT</option>
+                            <option value="PVT">PVT</option>
+                            <option value="MP">MP</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>附件（截图/日志等）</label>
+                    <input type="file" id="issueAttachment" multiple style="padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px; width: 100%;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeIssueReportModal()" class="btn btn-secondary">取消</button>
+                <button onclick="submitIssue()" class="btn btn-primary">提交问题</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 回归测试模态框 -->
+    <div id="regressionTestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🔄 回归测试</h3>
+                <button onclick="closeRegressionTestModal()" style="background:none;border:none;font-size:24px;cursor:pointer;">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>问题 ID</label>
+                    <input type="text" id="regressionIssueId" readonly style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px; background: #f5f6f7;">
+                </div>
+
+                <div class="form-group">
+                    <label>问题描述</label>
+                    <textarea id="regressionIssueDesc" readonly style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px; min-height: 80px; background: #f5f6f7;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>修复说明（责任部门填写）</label>
+                    <textarea id="fixDescription" placeholder="请责任部门填写修复方案、修改内容等..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px; min-height: 80px;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>回归测试结果 <span style="color: #f53f3f;">*</span></label>
+                    <select id="regressionResult" style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px;">
+                        <option value="pass">✅ 通过（问题已解决）</option>
+                        <option value="fail">❌ 不通过（问题仍存在）</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="failReasonGroup" style="display: none;">
+                    <label>不通过原因</label>
+                    <textarea id="failReason" placeholder="请说明问题仍存在的原因..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 6px; min-height: 80px;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeRegressionTestModal()" class="btn btn-secondary">取消</button>
+                <button onclick="submitRegressionTest()" class="btn btn-primary">提交回归结果</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 当前用户
+        let currentUser = null;
+
+        // 部门负责人映射
+        const departmentManagers = {
+            'software': [
+                { id: 'MGR-SW-001', name: '张经理 - 软件部' },
+                { id: 'MGR-SW-002', name: '李经理 - 软件部' }
+            ],
+            'hardware': [
+                { id: 'MGR-HW-001', name: '王经理 - 硬件部' },
+                { id: 'MGR-HW-002', name: '赵经理 - 硬件部' }
+            ],
+            'structure': [
+                { id: 'MGR-ST-001', name: '钱经理 - 结构部' },
+                { id: 'MGR-ST-002', name: '孙经理 - 结构部' }
+            ],
+            'product': [
+                { id: 'MGR-PR-001', name: '周经理 - 产品部' },
+                { id: 'MGR-PR-002', name: '吴经理 - 产品部' }
+            ]
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            checkPermission();
+        });
+
+        // 加载用户信息
+        function loadUserInfo() {
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('userAvatar').textContent = currentUser.avatar || currentUser.name[0];
+            document.getElementById('userName').textContent = currentUser.name;
+            
+            if (currentUser.role === 'admin' || currentUser.role === 'ceo' || currentUser.role === 'manager') {
+                document.getElementById('adminLink').style.display = 'block';
+            }
+        }
+
+        // 检查权限
+        function checkPermission() {
+            const isAdmin = currentUser.role === 'admin' || currentUser.role === 'ceo' || currentUser.role === 'manager';
+            if (isAdmin) {
+                document.getElementById('adminLink').style.display = 'block';
+            }
+        }
+
+        // 显示区块
+        function showSection(section) {
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(section + '-section');
+            if (target) {
+                target.classList.remove('hidden');
+            }
+        }
+
+        // 同步 PRD 需求
+        function syncPRDRequirements() {
+            alert('正在从 PRD 同步测试需求...\n\n• 功能需求 → 功能测试用例\n• 性能需求 → 性能测试用例\n• 接口需求 → 接口测试用例\n• 可靠性需求 → 可靠性测试用例\n\n同步完成！已导入 15 条测试需求');
+        }
+
+        // 显示问题提报模态框
+        function showIssueReportModal(testCaseId) {
+            document.getElementById('issueReportModal').classList.add('active');
+            if (testCaseId) {
+                document.getElementById('relatedTestCase').value = testCaseId;
+                document.getElementById('issueSource').value = 'test-execution';
+            }
+        }
+
+        // 关闭问题提报模态框
+        function closeIssueReportModal() {
+            document.getElementById('issueReportModal').classList.remove('active');
+        }
+
+        // 更新责任人列表
+        function updateManagerList() {
+            const dept = document.getElementById('responsibleDept').value;
+            const managerSelect = document.getElementById('responsibleManager');
+            
+            if (!dept) {
+                managerSelect.innerHTML = '<option value="">请先选择责任部门</option>';
+                return;
+            }
+            
+            const managers = departmentManagers[dept] || [];
+            managerSelect.innerHTML = managers.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+        }
+
+        // 提交问题
+        function submitIssue() {
+            const priority = document.getElementById('issuePriority').value;
+            const dept = document.getElementById('responsibleDept').value;
+            const manager = document.getElementById('responsibleManager').value;
+            
+            if (!dept || !manager) {
+                alert('请选择责任部门和责任人');
+                return;
+            }
+            
+            alert('问题已提报！\n\n已通知 ' + manager + '\n响应时限：根据优先级自动计算\n\n问题将自动跟踪，超时将升级通知');
+            closeIssueReportModal();
+        }
+
+        // 显示回归测试模态框
+        function showRegressionTestModal(issueId) {
+            document.getElementById('regressionTestModal').classList.add('active');
+            document.getElementById('regressionIssueId').value = issueId;
+            document.getElementById('regressionIssueDesc').value = 'PCB 焊盘偏移问题（硬件部已修复，版本：PCB-V1.1）';
+        }
+
+        // 关闭回归测试模态框
+        function closeRegressionTestModal() {
+            document.getElementById('regressionTestModal').classList.remove('active');
+        }
+
+        // 监听回归测试结果变化
+        document.getElementById('regressionResult')?.addEventListener('change', function() {
+            const failReasonGroup = document.getElementById('failReasonGroup');
+            if (this.value === 'fail') {
+                failReasonGroup.style.display = 'block';
+            } else {
+                failReasonGroup.style.display = 'none';
+            }
+        });
+
+        // 执行回归测试
+        function executeRegressionTest(regressionId) {
+            showRegressionTestModal('BUG-2026-017');
+        }
+
+        // 提交回归结果
+        function submitRegressionTest() {
+            const result = document.getElementById('regressionResult').value;
+            
+            if (result === 'pass') {
+                alert('回归测试通过！\n\n问题已关闭\n该功能可以进入下一阶段');
+            } else {
+                const failReason = document.getElementById('failReason').value;
+                if (!failReason) {
+                    alert('请填写不通过原因');
+                    return;
+                }
+                alert('回归测试不通过！\n\n问题已重新提报给责任部门\n请责任部门重新修复');
+            }
+            closeRegressionTestModal();
+        }
+
+        // 批准阶段转换
+        function approveStageTransition(project, fromStage, toStage) {
+            alert('批准阶段转换！\n\n项目：' + project + '\n从 ' + fromStage + ' → ' + toStage + '\n\n已通知所有部门进入' + toStage + '阶段');
+        }
+
+        // 显示添加模态框
+        function showAddModal(type) {
+            alert('新建' + type + '功能演示');
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
