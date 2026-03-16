@@ -550,10 +550,11 @@
         <!-- 包装设计 -->
         <section id="packaging-design-section" class="content-section hidden">
             <div class="section-header">
-                <h2 class="section-title">📦 包装设计评审</h2>
+                <h2 class="section-title">📦 包装设计与 ECN 变更</h2>
                 <div class="section-actions">
                     <button class="btn btn-primary" onclick="showAddModal('packaging')">+ 新建包装方案</button>
                     <button class="btn btn-secondary" onclick="showChecklistModal()">📋 评审 CheckList</button>
+                    <button class="btn btn-primary" onclick="showECNModal()">📝 ECN 变更</button>
                 </div>
             </div>
             <table class="data-table">
@@ -945,6 +946,202 @@
         function submitReview() {
             alert('评审提交成功！');
             closeModal();
+        }
+
+        // 显示 ECN 变更模态框
+        function showECNModal() {
+            const modalContent = `
+                <div style="padding: 24px;">
+                    <h3 style="margin-bottom: 20px; font-size: 18px;">📝 ECN 工程变更通知</h3>
+                    
+                    <div style="background: #fff3e6; border: 1px solid #ffd591; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+                        <div style="display: flex; gap: 12px; align-items: start;">
+                            <span style="font-size: 20px;">⚠️</span>
+                            <div>
+                                <div style="font-weight: 600; color: #d48806; margin-bottom: 8px;">ECN 变更管控原则</div>
+                                <div style="font-size: 13px; color: #646a73; line-height: 1.8;">
+                                    1. 确保变更的信息与实际想要变更的内容相符（BOM 描述、图纸等）<br>
+                                    2. 确保变更要求样品得到充分的验证，并符合要求（可靠性测试、手板验证等）
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; gap: 16px;">
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">一、变更基本信息</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div>
+                                    <label style="font-size: 13px;">ECN 编号</label>
+                                    <input type="text" value="ECN-2026-001" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">项目名称</label>
+                                    <input type="text" value="智能门锁 V2" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">变更类型</label>
+                                    <select style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                        <option>设计优化</option>
+                                        <option>材料变更</option>
+                                        <option>供应商变更</option>
+                                        <option>工艺改进</option>
+                                        <option>品质改善</option>
+                                        <option>成本降低</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">变更申请人</label>
+                                    <input type="text" value="李工程师" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">申请日期</label>
+                                    <input type="date" value="2026-03-16" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">紧急程度</label>
+                                    <select style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                        <option>正常</option>
+                                        <option>紧急</option>
+                                        <option>特急</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">二、变更内容描述</h4>
+                            <div style="display: grid; gap: 12px;">
+                                <div>
+                                    <label style="font-size: 13px;">变更原因</label>
+                                    <textarea placeholder="请详细说明变更原因..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; min-height: 80px; font-family: inherit;"></textarea>
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">变更前内容</label>
+                                    <textarea placeholder="描述变更前的设计/材料/工艺..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; min-height: 80px; font-family: inherit;"></textarea>
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">变更后内容</label>
+                                    <textarea placeholder="描述变更后的设计/材料/工艺..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; min-height: 80px; font-family: inherit;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">三、变更影响评估</h4>
+                            <div style="display: grid; gap: 12px;">
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> BOM 表变更
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 图纸变更
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 模具变更
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 工艺变更
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 成本变更
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 交期影响
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">四、验证要求</h4>
+                            <div style="display: grid; gap: 12px;">
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked> 手板验证
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked> 可靠性测试
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 小批量试产
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox"> 客户确认
+                                </label>
+                                <div>
+                                    <label style="font-size: 13px;">验证计划</label>
+                                    <textarea placeholder="详细说明验证计划和验收标准..." style="width: 100%; padding: 10px; border: 1px solid #e5e6eb; border-radius: 4px; min-height: 60px; font-family: inherit;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f5f6f7; padding: 16px; border-radius: 8px;">
+                            <h4 style="margin-bottom: 12px; font-size: 14px; color: #646a73;">五、变更实施计划</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div>
+                                    <label style="font-size: 13px;">计划实施日期</label>
+                                    <input type="date" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px;">责任人</label>
+                                    <input type="text" placeholder="变更实施负责人" style="width: 100%; padding: 8px; border: 1px solid #e5e6eb; border-radius: 4px; margin-top: 4px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end;">
+                        <button class="btn btn-secondary" onclick="closeECNModal()" style="padding: 10px 24px;">取消</button>
+                        <button class="btn btn-primary" onclick="submitECN()" style="padding: 10px 24px;">提交 ECN 申请</button>
+                    </div>
+                </div>
+            `;
+            
+            // 创建模态框
+            const modal = document.createElement('div');
+            modal.id = 'ecnModal';
+            modal.className = 'modal active';
+            modal.style.cssText = `
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 2000;
+                align-items: center;
+                justify-content: center;
+                overflow-y: auto;
+                padding: 20px;
+            `;
+            
+            const modalContentDiv = document.createElement('div');
+            modalContentDiv.style.cssText = `
+                background: white;
+                border-radius: 16px;
+                width: 100%;
+                max-width: 900px;
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 20px 0;
+            `;
+            modalContentDiv.innerHTML = modalContent;
+            
+            modal.appendChild(modalContentDiv);
+            document.body.appendChild(modal);
+        }
+
+        // 关闭 ECN 模态框
+        function closeECNModal() {
+            const modal = document.getElementById('ecnModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // 提交 ECN 变更
+        function submitECN() {
+            alert('ECN 变更申请已提交！\n\n变更流程：\n1. 变更申请 → 2. 影响评估 → 3. 样品验证 → 4. 审批 → 5. 实施变更');
+            closeECNModal();
         }
 
         // 退出登录
