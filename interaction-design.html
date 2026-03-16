@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能体交互设计说明 - XC 智能体系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f6f7;
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #1d2129;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #0066ff;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #1d2129;
+            margin: 32px 0 16px;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #1d2129;
+            margin: 24px 0 12px;
+        }
+
+        p {
+            color: #646a73;
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border: 1px solid #e5e6eb;
+        }
+
+        th {
+            background: #f5f6f7;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            background: #fff7e6;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            color: #d48806;
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #0066ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 24px;
+        }
+
+        .nav-link:hover {
+            background: #0052cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="interaction-center.html" class="nav-link">← 返回交互中心</a>
+        
+        <h1>🔗 智能体交互联动设计说明</h1>
+        
+        <p><strong>版本：</strong>V1.0 | <strong>更新时间：</strong>2026-03-16 | <strong>设计方：</strong>XC 智能体团队</p>
+
+        <h2>一、设计目标</h2>
+        <p>构建一套行业领先的智能体交互联动系统，实现：</p>
+        <ul style="margin-left: 20px; color: #646a73; line-height: 2;">
+            <li>✅ <strong>数据一处填写、多处同步</strong>（主数据驱动）</li>
+            <li>✅ <strong>跨部门自动协作</strong>（智能触发、自动流转）</li>
+            <li>✅ <strong>实时消息通知</strong>（飞书机器人 + 站内信）</li>
+            <li>✅ <strong>问题自动跟踪</strong>（超时预警、升级机制）</li>
+            <li>✅ <strong>阶段自动转换</strong>（条件检查、自动触发）</li>
+        </ul>
+
+        <h2>二、8 大核心交互流程</h2>
+
+        <h3>1. 立项联动（产品部 → 项目部）</h3>
+        <table>
+            <tr>
+                <th>触发条件</th>
+                <td>产品提案评审通过</td>
+            </tr>
+            <tr>
+                <th>发起方</th>
+                <td>产品部智能体</td>
+            </tr>
+            <tr>
+                <th>接收方</th>
+                <td>项目部智能体</td>
+            </tr>
+            <tr>
+                <th>联动内容</th>
+                <td>
+                    <ul style="margin-left: 20px;">
+                        <li>自动创建项目（PRJ-YYYY-NNN）</li>
+                        <li>同步产品信息（名称、型号、核心卖点）</li>
+                        <li>同步市场信息（目标市场、市场规模）</li>
+                        <li>生成项目立项书（自动填充）</li>
+                        <li>发送立项通知给相关人员</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>数据同步</th>
+                <td>产品需求主表 → 项目主表（P003 产品名称、D002 核心卖点、D004 目标市场）</td>
+            </tr>
+        </table>
+
+        <h3>2. 需求分发（产品部 → 硬件/软件/结构部）</h3>
+        <table>
+            <tr>
+                <th>触发条件</th>
+                <td>PRD 确认并发布</td>
+            </tr>
+            <tr>
+                <th>发起方</th>
+                <td>产品部智能体</td>
+            </tr>
+            <tr>
+                <th>接收方</th>
+                <td>硬件部、软件部、结构部智能体</td>
+            </tr>
+            <tr>
+                <th>联动内容</th>
+                <td>
+                    <ul style="margin-left: 20px;">
+                        <li>自动提取硬件相关需求 → 硬件部需求池</li>
+                        <li>自动提取软件相关需求 → 软件部需求池</li>
+                        <li>自动提取结构相关需求 → 结构部需求池</li>
+                        <li>发送需求评审邀请（含截止时间）</li>
+                        <li>创建需求跟踪表（关联 PRD 需求 ID）</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>数据同步</th>
+                <td>需求跟踪表 → 各部门需求池（REQ002 需求描述、REQ003 优先级、REQ007 验收标准）</td>
+            </tr>
+        </table>
+
+        <h3>3. 进度同步（各部门 → 项目部）</h3>
+        <table>
+            <tr>
+                <th>触发条件</th>
+                <td>任务状态变更（每日自动同步 + 手动更新）</td>
+            </tr>
+            <tr>
+                <th>发起方</th>
+                <td>硬件部、软件部、结构部、测试部智能体</td>
+            </tr>
+            <tr>
+                <th>接收方</th>
+                <td>项目部智能体</td>
+            </tr>
+            <tr>
+                <th>联动内容</th>
+                <td>
+                    <ul style="margin-left: 20px;">
+                        <li>任务完成度自动更新（0-100%）</li>
+                        <li>里程碑状态同步（未开始/进行中/已完成/延期）</li>
+                        <li>风险自动上报（延期风险、技术风险）</li>
+                        <li>生成周报/月报（自动汇总各部门进度）</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>同步频率</th>
+                <td>每日 18:00 自动同步 + 状态变更时实时同步</td>
+            </tr>
+        </table>
+
+        <h3>4. GPIO 配置联动（硬件部 ↔ 软件部）</h3>
+        <table>
+            <tr>
+                <th>触发条件</th>
+                <td>GPIO 配置表创建/修改</td>
+            </tr>
+            <tr>
+                <th>发起方</th>
+                <td>硬件部智能体</td>
+            </tr>
+            <tr>
+                <th>接收方</th>
+                <td>软件部智能体</td>
+            </tr>
+            <tr>
+                <th>联动内容</th>
+                <td>
+                    <ul style="margin-left: 20px;">
+                        <li>GPIO 配置表自动同步（双向）</li>
+                        <li>冲突自动检测（引脚复用冲突）</li>
+                        <li>软件确认状态同步</li>
+                        <li>变更通知（配置变更时通知软件部）</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>数据同步</th>
+                <td>GPIO 配置表（硬件部）↔ GPIO 配置表（软件部）</td>
+            </tr>
+            <tr>
+                <th>冲突处理</th>
+                <td>发现冲突 → 自动通知双方负责人 → 召开协调会 → 更新配置表</td>
+            </tr>
+        </table>
+
+        <h3>5. 尺寸配合联动（结构部 ↔ 硬件部）</h3>
+        <table>
+            <tr>
+                <th>触发条件</th>
+                <td>结构设计完成/PCB 设计完成</td>
+            </tr>
+            <tr>
+                <th>发起方</th>
+                <td>结构部/硬件部智能体</td>
+            </tr>
+            <tr>
+                <th>接收方</th>
+                <td>硬件部/结构部智能体</td>
+            </tr>
+            <tr>
+                <th>联动内容</th>
+                <td>
+                    <ul style="margin-left: 20px;">
+                        <li>PCB 板框尺寸同步（结构→硬件）</li>
+                        <li>器件布局空间约束同步（硬件→结构）</li>
+                        <li>接口位置确认（双向）</li>
+                        <li>散热要求同步（结构→硬件）</li>
+                        <li>干涉检查（自动检测 3D 模型与 PCB）</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>数据同步</th>
+                <td>结构设计主表（STR007 外形尺寸）↔ 硬件设计表（尺寸限制）</td>
+            </tr>
+        </table>
+
+        <h3>6. 测试申请联动（硬件/软件/结构部 → 测试部）</h3>
+        <table>
+            <tr>
+                <th>触发条件</th>
+                <td>样机完成/版本发布</td>
+            </tr>
+            <tr>
+                <th>发起方</th>
+                <td>硬件部/软件部/结构部智能体</td>
+            </tr>
+            <tr>
+                <th>接收方</th>
+                <td>测试部智能体</td>
+            </tr>
+            <tr>
+                <th>联动内容</th>
+                <td>
+                    <ul style="margin-left: 20px;">
+                        <li>自动创建测试任务（EVT/DVT/PVT）</li>
+                        <li>同步测试样品信息（数量、版本）</li>
+                        <li>同步测试需求（基于 PRD 性能指标）</li>
+                        <li>预约测试时间</li>
+                        <li>发送测试申请通知</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>数据同步</th>
+                <td>硬件版本表/软件版本表/结构设计表 → 测试计划表</td>
+            </tr>
+        </table>
+
+        <h3>7. 问题反馈联动（测试部 → 各部门）</h3>
+        <table>
+            <tr>
+                <th>触发条件</th>
+                <td>测试发现问题</td>
+            </tr>
+            <tr>
+                <th>发起方</th>
+                <td>测试部智能体</td>
+            </tr>
+            <tr>
+                <th>接收方</th>
+                <td>硬件部/软件部/结构部智能体</td>
+            </tr>
+            <tr>
+                <th>联动内容</th>
+                <td>
+                    <ul style="margin-left: 20px;">
+                        <li>问题自动分派（根据问题类型）</li>
+                        <li>超时预警（P0:2h, P1:4h, P2:1 天，P3:3 天）</li>
+                        <li>升级通知（超时未处理→部门经理→项目经理）</li>
+                        <li>回归测试通知（修复完成后自动通知测试部）</li>
+                        <li>问题统计分析（周报/月报）</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>数据同步</th>
+                <td>问题跟踪表（测试部）→ 问题跟踪表（各部门）</td>
+            </tr>
+        </table>
+
+        <h3>8. 阶段转换联动（项目部 → 各部门）</h3>
+        <table>
+            <tr>
+                <th>触发条件</th>
+                <td>阶段评审通过</td>
+            </tr>
+            <tr>
+                <th>发起方</th>
+                <td>项目部智能体</td>
+            </tr>
+            <tr>
+                <th>接收方</th>
+                <td>所有部门智能体</td>
+            </tr>
+            <tr>
+                <th>联动内容</th>
+                <td>
+                    <ul style="margin-left: 20px;">
+                        <li>阶段转换检查（前置条件自动检查）</li>
+                        <li>创建下一阶段任务（自动分解 WBS）</li>
+                        <li>发送阶段转换通知</li>
+                        <li>更新项目状态</li>
+                        <li>归档当前阶段文档</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>转换条件示例</th>
+                <td>
+                    <strong>EVT→DVT:</strong>
+                    <ul style="margin-left: 20px;">
+                        <li>EVT 评审通过 ✅</li>
+                        <li>无 P0/P1 开放问题 ✅</li>
+                        <li>硬件设计定型 ✅</li>
+                        <li>软件版本稳定 ✅</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <h2>三、技术实现方案</h2>
+
+        <h3>1. 数据联动机制</h3>
+        <div class="code-block">
+<strong>主数据同步架构：</strong>
+
+数据输入层（飞书对话/表格/表单）
+         ↓
+主数据存储（唯一数据源 - 项目主表/产品主表）
+         ↓
+字段映射引擎（检测变更→查找文档→定位位置）
+         ↓
+文档同步服务（立项书│章程│PRD│MRD│测试报告│...）
+         ↓
+跨部门联动（产品↔项目↔硬件↔软件↔结构↔测试）
+        </div>
+
+        <h3>2. 消息通知系统</h3>
+        <table>
+            <tr>
+                <th>通知类型</th>
+                <th>通知渠道</th>
+                <th>触发条件</th>
+            </tr>
+            <tr>
+                <td>评审邀请</td>
+                <td>飞书机器人 + 邮件</td>
+                <td>评审任务创建</td>
+            </tr>
+            <tr>
+                <td>需求分发</td>
+                <td>飞书机器人</td>
+                <td>PRD 确认</td>
+            </tr>
+            <tr>
+                <td>进度提醒</td>
+                <td>飞书机器人（每日 9:00）</td>
+                <td>Cron 定时任务</td>
+            </tr>
+            <tr>
+                <td>问题预警</td>
+                <td>飞书机器人 + 邮件</td>
+                <td>问题超时</td>
+            </tr>
+            <tr>
+                <td>阶段转换</td>
+                <td>飞书机器人 + 邮件</td>
+                <td>阶段评审通过</td>
+            </tr>
+        </table>
+
+        <h3>3. 工作流引擎</h3>
+        <div class="code-block">
+<strong>Cron 定时任务配置：</strong>
+
+1. 项目每日提醒（工作日 9:00）
+   - 检查今天到期的任务/评审
+   - 检查超时未关闭的问题
+   - 发送提醒给相关负责人
+
+2. 问题超时检查（工作日 9:00 和 15:00）
+   - 检查截止日期已过但未关闭的问题
+   - 检查 P0/P1 问题处理超时
+   - 发送预警通知
+
+3. 周报自动生成（周五 17:00）
+   - 汇总本周项目进度
+   - 汇总本周问题关闭情况
+   - 生成周报文档
+
+4. 进度同步（每日 18:00）
+   - 各部门任务状态同步到项目部
+   - 更新项目进度百分比
+   - 生成进度报告
+        </div>
+
+        <h2>四、交互中心功能</h2>
+
+        <div class="highlight">
+            <div class="highlight-title">📍 交互中心定位</div>
+            <p style="margin-bottom: 0;">交互中心是跨部门协作的统一入口，提供：</p>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+                <li>待处理交互事项列表</li>
+                <li>已完成交互历史记录</li>
+                <li>实时通知中心</li>
+                <li>交互流程可视化</li>
+            </ul>
+        </div>
+
+        <h2>五、实施优先级</h2>
+
+        <table>
+            <tr>
+                <th>优先级</th>
+                <th>交互流程</th>
+                <th>实施周期</th>
+                <th>依赖</th>
+            </tr>
+            <tr>
+                <td><span style="color: #f53f3f; font-weight: 600;">P0</span></td>
+                <td>立项联动、需求分发</td>
+                <td>1 周</td>
+                <td>产品部、项目部智能体</td>
+            </tr>
+            <tr>
+                <td><span style="color: #f53f3f; font-weight: 600;">P0</span></td>
+                <td>问题反馈联动</td>
+                <td>1 周</td>
+                <td>测试部智能体</td>
+            </tr>
+            <tr>
+                <td><span style="color: #ff7a45; font-weight: 600;">P1</span></td>
+                <td>GPIO 配置联动、尺寸配合联动</td>
+                <td>1 周</td>
+                <td>硬件部、软件部、结构部智能体</td>
+            </tr>
+            <tr>
+                <td><span style="color: #ff7a45; font-weight: 600;">P1</span></td>
+                <td>测试申请联动</td>
+                <td>1 周</td>
+                <td>测试部智能体</td>
+            </tr>
+            <tr>
+                <td><span style="color: #00b365; font-weight: 600;">P2</span></td>
+                <td>进度同步、阶段转换联动</td>
+                <td>2 周</td>
+                <td>所有部门智能体</td>
+            </tr>
+        </table>
+
+        <h2>六、预期收益</h2>
+
+        <table>
+            <tr>
+                <th>指标</th>
+                <th>当前</th>
+                <th>目标</th>
+                <th>提升</th>
+            </tr>
+            <tr>
+                <td>信息传递延迟</td>
+                <td>1-2 天</td>
+                <td>&lt;1 小时</td>
+                <td>95%↓</td>
+            </tr>
+            <tr>
+                <td>问题响应时间</td>
+                <td>4-8 小时</td>
+                <td>&lt;2 小时</td>
+                <td>75%↓</td>
+            </tr>
+            <tr>
+                <td>跨部门会议</td>
+                <td>每周 5-8 次</td>
+                <td>每周 2-3 次</td>
+                <td>60%↓</td>
+            </tr>
+            <tr>
+                <td>文档一致性</td>
+                <td>70%</td>
+                <td>100%</td>
+                <td>30%↑</td>
+            </tr>
+            <tr>
+                <td>问题关闭率</td>
+                <td>60%</td>
+                <td>90%</td>
+                <td>50%↑</td>
+            </tr>
+        </table>
+
+        <p style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e6eb; text-align: center; color: #8f959e;">
+            文档维护：本文档由 XC 智能体团队自动维护，如有更新将自动同步版本。<br>
+            最后更新：2026 年 3 月 16 日
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能体交互中心 - XC 智能体系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f6f7;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background: #0066ff;
+            color: white;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            color: #0066ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 主内容区 */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* 页面标题 */
+        .page-header {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 12px;
+        }
+
+        .page-desc {
+            color: #8f959e;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 交互流程图 */
+        .flow-diagram {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .flow-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #1d2129;
+        }
+
+        .flow-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            min-width: 800px;
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .flow-node {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 120px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .flow-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,102,255,0.3);
+        }
+
+        .flow-node.product { background: linear-gradient(135deg, #722ed1 0%, #5b21b5 100%); }
+        .flow-node.project { background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%); }
+        .flow-node.hardware { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .flow-node.software { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .flow-node.structure { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .flow-node.test { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+
+        .flow-arrow {
+            font-size: 20px;
+            color: #8f959e;
+        }
+
+        .flow-arrow.down {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /* 交互卡片 */
+        .interaction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .interaction-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 4px solid #0066ff;
+        }
+
+        .interaction-card.pending { border-left-color: #f59e0b; }
+        .interaction-card.completed { border-left-color: #10b981; }
+
+        .interaction-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .interaction-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .interaction-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-waiting { background: #fff7e6; color: #d48806; }
+        .status-processing { background: #e6f0ff; color: #0066ff; }
+        .status-completed { background: #f6ffed; color: #00b365; }
+
+        .interaction-parties {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #646a73;
+        }
+
+        .party {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .interaction-desc {
+            font-size: 13px;
+            color: #8f959e;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .interaction-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #0066ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052cc;
+        }
+
+        .btn-secondary {
+            background: #f5f6f7;
+            color: #646a73;
+            border: 1px solid #e5e6eb;
+        }
+
+        /* 通知列表 */
+        .notification-section {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            padding: 12px;
+            border-bottom: 1px solid #f5f6f7;
+            transition: background 0.2s;
+        }
+
+        .notification-item:hover {
+            background: #f5f6f7;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-icon {
+            font-size: 20px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1d2129;
+            margin-bottom: 4px;
+        }
+
+        .notification-desc {
+            font-size: 13px;
+            color: #8f959e;
+            margin-bottom: 8px;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #8f959e;
+        }
+
+        .notification-unread {
+            background: #e6f0ff;
+        }
+
+        .notification-unread .notification-title {
+            color: #0066ff;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">🔗 智能体交互中心</div>
+            <nav class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="contacts.html">通讯录</a>
+                <a href="token-stats.html">Token 统计</a>
+                <a href="project-agent.html">智能体</a>
+                <a href="interaction-center.html" class="active">交互中心</a>
+                <a href="admin.html" id="adminLink" style="display:none;">管理后台</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">用户</span>
+            </div>
+            <button onclick="logout()" style="background:none;border:none;color:white;cursor:pointer;">退出</button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <div class="main-container">
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1 class="page-title">🔗 智能体交互中心</h1>
+            <p class="page-desc">跨部门协作、数据联动、消息通知的统一管理中心</p>
+        </div>
+
+        <!-- 交互流程图 -->
+        <div class="flow-diagram">
+            <h3 class="flow-title">📊 智能体交互联动流程</h3>
+            <div class="flow-content">
+                <div class="flow-row">
+                    <div class="flow-node product" onclick="location.href='product-agent.html'">📊 产品部</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node project" onclick="location.href='project-agent.html'">📋 项目部</div>
+                </div>
+                <div class="flow-row">
+                    <span class="flow-arrow down">↓ 需求分发</span>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-node hardware" onclick="location.href='hardware-agent.html'">🔧 硬件部</div>
+                    <span class="flow-arrow">↔</span>
+                    <div class="flow-node software" onclick="location.href='software-agent.html'">💻 软件部</div>
+                    <span class="flow-arrow">↔</span>
+                    <div class="flow-node structure" onclick="location.href='structure-agent.html'">🏗️ 结构部</div>
+                </div>
+                <div class="flow-row">
+                    <span class="flow-arrow down">↓ 测试申请</span>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-node test" onclick="location.href='test-agent.html'">✅ 测试部</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 待处理交互 -->
+        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #1d2129;">⏳ 待处理交互</h3>
+        <div class="interaction-grid">
+            <div class="interaction-card pending">
+                <div class="interaction-header">
+                    <h4 class="interaction-title">📋 需求评审邀请</h4>
+                    <span class="interaction-status status-waiting">待处理</span>
+                </div>
+                <div class="interaction-parties">
+                    <span class="party">📊 产品部</span>
+                    <span>→</span>
+                    <span class="party">🔧 硬件部</span>
+                </div>
+                <p class="interaction-desc">PRD-2026-001 智能门锁 V2 需求评审，请于 3 月 20 日前完成评审</p>
+                <div class="interaction-actions">
+                    <button class="btn btn-primary" onclick="alert('已确认参加评审')">参加评审</button>
+                    <button class="btn btn-secondary" onclick="alert('已标记为稍后处理')">稍后处理</button>
+                </div>
+            </div>
+
+            <div class="interaction-card pending">
+                <div class="interaction-header">
+                    <h4 class="interaction-title">🔌 GPIO 配置确认</h4>
+                    <span class="interaction-status status-processing">处理中</span>
+                </div>
+                <div class="interaction-parties">
+                    <span class="party">🔧 硬件部</span>
+                    <span>→</span>
+                    <span class="party">💻 软件部</span>
+                </div>
+                <p class="interaction-desc">GPIO 配置表 V1.2 已更新，请软件部确认引脚分配</p>
+                <div class="interaction-actions">
+                    <button class="btn btn-primary" onclick="alert('已确认 GPIO 配置')">确认配置</button>
+                    <button class="btn btn-secondary" onclick="alert('已提出修改意见')">提出意见</button>
+                </div>
+            </div>
+
+            <div class="interaction-card pending">
+                <div class="interaction-header">
+                    <h4 class="interaction-title">📦 样机测试申请</h4>
+                    <span class="interaction-status status-waiting">待处理</span>
+                </div>
+                <div class="interaction-parties">
+                    <span class="party">🏗️ 结构部</span>
+                    <span>→</span>
+                    <span class="party">✅ 测试部</span>
+                </div>
+                <p class="interaction-desc">智能门锁 V2 手板已完成，申请 EVT 测试（5 台样机）</p>
+                <div class="interaction-actions">
+                    <button class="btn btn-primary" onclick="alert('已受理测试申请')">受理申请</button>
+                    <button class="btn btn-secondary" onclick="alert('已要求补充材料')">补充材料</button>
+                </div>
+            </div>
+
+            <div class="interaction-card pending">
+                <div class="interaction-header">
+                    <h4 class="interaction-title">⚠️ 问题修复提醒</h4>
+                    <span class="interaction-status status-waiting">待处理</span>
+                </div>
+                <div class="interaction-parties">
+                    <span class="party">✅ 测试部</span>
+                    <span>→</span>
+                    <span class="party">💻 软件部</span>
+                </div>
+                <p class="interaction-desc">BUG-2026-015 蓝牙连接超时问题（P1 级），已超时 2 天未修复</p>
+                <div class="interaction-actions">
+                    <button class="btn btn-primary" onclick="alert('已标记为修复中')">修复中</button>
+                    <button class="btn btn-secondary" onclick="alert('已申请延期')">申请延期</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 已完成交互 -->
+        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #1d2129; margin-top: 24px;">✅ 已完成交互</h3>
+        <div class="interaction-grid">
+            <div class="interaction-card completed">
+                <div class="interaction-header">
+                    <h4 class="interaction-title">📊 产品立项通过</h4>
+                    <span class="interaction-status status-completed">已完成</span>
+                </div>
+                <div class="interaction-parties">
+                    <span class="party">📊 产品部</span>
+                    <span>→</span>
+                    <span class="party">📋 项目部</span>
+                </div>
+                <p class="interaction-desc">智能门锁 V2 产品提案已通过评审，项目 PRJ-2026-001 已创建</p>
+                <div class="interaction-actions">
+                    <button class="btn btn-secondary" onclick="alert('查看项目详情')">查看详情</button>
+                </div>
+            </div>
+
+            <div class="interaction-card completed">
+                <div class="interaction-header">
+                    <h4 class="interaction-title">📄 PRD 已分发</h4>
+                    <span class="interaction-status status-completed">已完成</span>
+                </div>
+                <div class="interaction-parties">
+                    <span class="party">📊 产品部</span>
+                    <span>→</span>
+                    <span class="party">🔧💻🏗️ 执行部门</span>
+                </div>
+                <p class="interaction-desc">PRD-2026-001 已分发给硬件部、软件部、结构部</p>
+                <div class="interaction-actions">
+                    <button class="btn btn-secondary" onclick="alert('查看 PRD 文档')">查看 PRD</button>
+                </div>
+            </div>
+
+            <div class="interaction-card completed">
+                <div class="interaction-header">
+                    <h4 class="interaction-title">✅ EVT 评审通过</h4>
+                    <span class="interaction-status status-completed">已完成</span>
+                </div>
+                <div class="interaction-parties">
+                    <span class="party">✅ 测试部</span>
+                    <span>→</span>
+                    <span class="party">📋 项目部</span>
+                </div>
+                <p class="interaction-desc">EVT 阶段评审通过，项目进入 DVT 阶段</p>
+                <div class="interaction-actions">
+                    <button class="btn btn-secondary" onclick="alert('查看评审报告')">查看报告</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通知中心 -->
+        <div class="notification-section">
+            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #1d2129;">🔔 交互通知</h3>
+            <div class="notification-list">
+                <div class="notification-item notification-unread">
+                    <div class="notification-icon">📊</div>
+                    <div class="notification-content">
+                        <div class="notification-title">产品部发起了需求评审邀请</div>
+                        <div class="notification-desc">PRD-2026-001 智能门锁 V2 需求评审，请于 3 月 20 日前完成评审</div>
+                        <div class="notification-time">10 分钟前</div>
+                    </div>
+                </div>
+                <div class="notification-item notification-unread">
+                    <div class="notification-icon">🔌</div>
+                    <div class="notification-content">
+                        <div class="notification-title">硬件部更新了 GPIO 配置表</div>
+                        <div class="notification-desc">GPIO 配置表 V1.2 已更新，请软件部确认引脚分配</div>
+                        <div class="notification-time">30 分钟前</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon">📦</div>
+                    <div class="notification-content">
+                        <div class="notification-title">结构部提交了样机测试申请</div>
+                        <div class="notification-desc">智能门锁 V2 手板已完成，申请 EVT 测试（5 台样机）</div>
+                        <div class="notification-time">2 小时前</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon">⚠️</div>
+                    <div class="notification-content">
+                        <div class="notification-title">问题修复超时提醒</div>
+                        <div class="notification-desc">BUG-2026-015 蓝牙连接超时问题（P1 级），已超时 2 天未修复</div>
+                        <div class="notification-time">3 小时前</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon">✅</div>
+                    <div class="notification-content">
+                        <div class="notification-title">EVT 阶段评审通过</div>
+                        <div class="notification-desc">EVT 阶段评审通过，项目进入 DVT 阶段</div>
+                        <div class="notification-time">昨天</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 当前用户
+        let currentUser = null;
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            checkPermission();
+        });
+
+        // 加载用户信息
+        function loadUserInfo() {
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('userAvatar').textContent = currentUser.avatar || currentUser.name[0];
+            document.getElementById('userName').textContent = currentUser.name;
+            
+            if (currentUser.role === 'admin' || currentUser.role === 'ceo' || currentUser.role === 'manager') {
+                document.getElementById('adminLink').style.display = 'block';
+            }
+        }
+
+        // 检查权限
+        function checkPermission() {
+            const isAdmin = currentUser.role === 'admin' || currentUser.role === 'ceo' || currentUser.role === 'manager';
+            if (isAdmin) {
+                document.getElementById('adminLink').style.display = 'block';
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
