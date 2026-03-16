@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业通讯录 - XC 智能体系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f6f7;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background: #0066ff;
+            color: white;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            color: #0066ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 主内容区 */
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px;
+            gap: 16px;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            height: calc(100vh - 92px);
+            overflow-y: auto;
+        }
+
+        .search-box {
+            margin-bottom: 16px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #0066ff;
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+        }
+
+        .filter-title {
+            font-size: 12px;
+            color: #8f959e;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .filter-item:hover {
+            background: #f5f6f7;
+        }
+
+        .filter-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #0066ff;
+        }
+
+        .department-tree {
+            list-style: none;
+        }
+
+        .department-tree li {
+            margin-bottom: 4px;
+        }
+
+        .department-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .department-item:hover {
+            background: #f5f6f7;
+        }
+
+        .department-item.active {
+            background: #e6f0ff;
+            color: #0066ff;
+        }
+
+        .department-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .department-icon {
+            font-size: 16px;
+        }
+
+        .department-count {
+            background: #f2f3f5;
+            color: #646a73;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .department-item.active .department-count {
+            background: #0066ff;
+            color: white;
+        }
+
+        /* 主内容区 */
+        .content {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .content-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e6eb;
+        }
+
+        .content-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+        }
+
+        .view-btn {
+            padding: 8px 12px;
+            border: 1px solid #e5e6eb;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover,
+        .view-btn.active {
+            border-color: #0066ff;
+            color: #0066ff;
+        }
+
+        /* 用户列表 */
+        .user-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 1px solid #e5e6eb;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .user-card:hover {
+            border-color: #0066ff;
+            box-shadow: 0 2px 8px rgba(0,102,255,0.1);
+        }
+
+        .user-card-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .user-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-card-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 4px;
+        }
+
+        .user-card-position {
+            font-size: 13px;
+            color: #8f959e;
+            margin-bottom: 4px;
+        }
+
+        .user-card-dept {
+            font-size: 13px;
+            color: #0066ff;
+        }
+
+        .user-card-stats {
+            display: flex;
+            gap: 24px;
+            text-align: right;
+        }
+
+        .stat-item {
+            min-width: 80px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #8f959e;
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #e8f7f0;
+            color: #00b365;
+        }
+
+        .status-busy {
+            background: #fff3e8;
+            color: #ff7a45;
+        }
+
+        .status-offline {
+            background: #f2f3f5;
+            color: #8f959e;
+        }
+
+        /* 权限提示 */
+        .permission-tip {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .permission-tip-icon {
+            font-size: 20px;
+        }
+
+        .permission-tip-text {
+            color: #d48806;
+            font-size: 14px;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8f959e;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #1d2129;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 300px;
+            }
+
+            .user-card-stats {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">🤖 XC 智能体系统</div>
+            <nav class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="contacts.html" class="active">通讯录</a>
+                <a href="token-stats.html">Token 统计</a>
+                <a href="project-agent.html">智能体</a>
+                <a href="#" id="adminLink" style="display:none;">管理后台</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">用户</span>
+            </div>
+            <button onclick="logout()" style="background:none;border:none;color:white;cursor:pointer;">退出</button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <div class="main-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索姓名、部门、职位..." oninput="searchUsers()">
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-title">快速筛选</div>
+                <label class="filter-item">
+                    <input type="checkbox" id="filterSubordinates" onchange="filterUsers()">
+                    <span>仅显示我的下属</span>
+                </label>
+                <label class="filter-item">
+                    <input type="checkbox" id="filterActive" onchange="filterUsers()">
+                    <span>仅显示活跃用户</span>
+                </label>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-title">部门</div>
+                <ul class="department-tree" id="departmentTree">
+                    <!-- 动态生成 -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="content">
+            <div class="content-header">
+                <h1 class="content-title" id="contentTitle">全部成员</h1>
+                <div class="view-toggle">
+                    <button class="view-btn active">列表</button>
+                    <button class="view-btn">卡片</button>
+                </div>
+            </div>
+
+            <!-- 权限提示 -->
+            <div class="permission-tip" id="permissionTip" style="display:none;">
+                <span class="permission-tip-icon">ℹ️</span>
+                <span class="permission-tip-text">您只能查看自己和下属的 Token 使用情况</span>
+            </div>
+
+            <!-- 用户列表 -->
+            <div class="user-list" id="userList">
+                <!-- 动态生成 -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 模拟用户数据
+        const currentUser = {
+            userId: 'USR-2026-001',
+            name: '张三',
+            department: '产品部',
+            position: '产品经理',
+            role: 'manager', // employee, supervisor, manager, ceo
+            avatar: '张'
+        };
+
+        // 模拟部门数据
+        const departments = [
+            { id: 'DEPT-001', name: '产品部', icon: '📊', count: 12 },
+            { id: 'DEPT-002', name: '项目部', icon: '📋', count: 8 },
+            { id: 'DEPT-003', name: '硬件部', icon: '🔧', count: 15 },
+            { id: 'DEPT-004', name: '软件部', icon: '💻', count: 20 },
+            { id: 'DEPT-005', name: '结构部', icon: '🏗️', count: 10 },
+            { id: 'DEPT-006', name: '测试部', icon: '✅', count: 12 },
+            { id: 'DEPT-007', name: '工厂', icon: '🏭', count: 25 },
+            { id: 'DEPT-008', name: '管理层', icon: '👔', count: 5 }
+        ];
+
+        // 模拟用户数据
+        const allUsers = [
+            { userId: 'USR-2026-001', name: '张三', department: '产品部', position: '产品经理', manager: '李四', status: 'active', tokens: 12450, calls: 356 },
+            { userId: 'USR-2026-002', name: '李四', department: '产品部', position: '产品总监', manager: '王五', status: 'active', tokens: 8320, calls: 245 },
+            { userId: 'USR-2026-003', name: '王五', department: '产品部', position: '产品助理', manager: '张三', status: 'active', tokens: 5670, calls: 189 },
+            { userId: 'USR-2026-004', name: '赵六', department: '软件部', position: '软件工程师', manager: '张三', status: 'active', tokens: 45678, calls: 1234 },
+            { userId: 'USR-2026-005', name: '钱七', department: '硬件部', position: '硬件工程师', manager: '孙八', status: 'busy', tokens: 38456, calls: 987 },
+            { userId: 'USR-2026-006', name: '孙八', department: '硬件部', position: '硬件总监', manager: '周九', status: 'active', tokens: 32123, calls: 856 },
+            { userId: 'USR-2026-007', name: '周九', department: '测试部', position: '测试工程师', manager: '孙八', status: 'offline', tokens: 28900, calls: 756 },
+            { userId: 'USR-2026-008', name: '吴十', department: '结构部', position: '结构工程师', manager: '张三', status: 'active', tokens: 25600, calls: 678 },
+            { userId: 'USR-2026-009', name: '郑一', department: '项目部', position: '项目经理', manager: '王五', status: 'active', tokens: 22340, calls: 589 },
+            { userId: 'USR-2026-010', name: '王五', department: '管理层', position: '总经理', manager: null, status: 'active', tokens: 56780, calls: 1567 }
+        ];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            renderDepartments();
+            renderUsers(allUsers);
+            checkPermission();
+        });
+
+        // 加载用户信息
+        function loadUserInfo() {
+            // 从 localStorage 获取登录信息
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                Object.assign(currentUser, JSON.parse(savedUser));
+            }
+            document.getElementById('userAvatar').textContent = currentUser.avatar || currentUser.name[0];
+            document.getElementById('userName').textContent = currentUser.name;
+        }
+
+        // 检查权限
+        function checkPermission() {
+            if (currentUser.role === 'manager' || currentUser.role === 'ceo') {
+                document.getElementById('adminLink').style.display = 'block';
+                document.getElementById('permissionTip').style.display = 'flex';
+            }
+        }
+
+        // 渲染部门树
+        function renderDepartments() {
+            const tree = document.getElementById('departmentTree');
+            tree.innerHTML = `
+                <li>
+                    <div class="department-item active" onclick="filterByDepartment('all', this)">
+                        <div class="department-name">
+                            <span class="department-icon">📁</span>
+                            <span>全部部门</span>
+                        </div>
+                        <span class="department-count">${allUsers.length}</span>
+                    </div>
+                </li>
+            `;
+            
+            departments.forEach(dept => {
+                const userCount = allUsers.filter(u => u.department === dept.name).length;
+                if (userCount > 0) {
+                    tree.innerHTML += `
+                        <li>
+                            <div class="department-item" onclick="filterByDepartment('${dept.name}', this)">
+                                <div class="department-name">
+                                    <span class="department-icon">${dept.icon}</span>
+                                    <span>${dept.name}</span>
+                                </div>
+                                <span class="department-count">${userCount}</span>
+                            </div>
+                        </li>
+                    `;
+                }
+            });
+        }
+
+        // 渲染用户列表
+        function renderUsers(users) {
+            const list = document.getElementById('userList');
+            
+            if (users.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <div class="empty-state-title">没有找到用户</div>
+                        <p>尝试调整搜索条件或筛选器</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = users.map(user => `
+                <div class="user-card" onclick="viewUserDetail('${user.userId}')">
+                    <div class="user-card-avatar">${user.name[0]}</div>
+                    <div class="user-card-info">
+                        <div class="user-card-name">${user.name}</div>
+                        <div class="user-card-position">${user.position}</div>
+                        <div class="user-card-dept">${user.department}</div>
+                    </div>
+                    <div class="user-card-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${user.tokens.toLocaleString()}</div>
+                            <div class="stat-label">Token 用量</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${user.calls}</div>
+                            <div class="stat-label">调用次数</div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-${user.status}">${getStatusText(user.status)}</span>
+                </div>
+            `).join('');
+        }
+
+        // 获取状态文本
+        function getStatusText(status) {
+            const statusMap = {
+                'active': '活跃',
+                'busy': '忙碌',
+                'offline': '离线'
+            };
+            return statusMap[status] || status;
+        }
+
+        // 按部门筛选
+        function filterByDepartment(dept, element) {
+            document.querySelectorAll('.department-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            if (dept === 'all') {
+                document.getElementById('contentTitle').textContent = '全部成员';
+                renderUsers(allUsers);
+            } else {
+                document.getElementById('contentTitle').textContent = dept;
+                const filtered = allUsers.filter(u => u.department === dept);
+                renderUsers(filtered);
+            }
+        }
+
+        // 搜索用户
+        function searchUsers() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allUsers.filter(u => 
+                u.name.toLowerCase().includes(keyword) ||
+                u.department.toLowerCase().includes(keyword) ||
+                u.position.toLowerCase().includes(keyword)
+            );
+            renderUsers(filtered);
+        }
+
+        // 筛选用户
+        function filterUsers() {
+            let filtered = [...allUsers];
+
+            // 仅显示下属
+            if (document.getElementById('filterSubordinates').checked) {
+                filtered = filtered.filter(u => u.manager === currentUser.name);
+            }
+
+            // 仅显示活跃用户
+            if (document.getElementById('filterActive').checked) {
+                filtered = filtered.filter(u => u.status === 'active');
+            }
+
+            renderUsers(filtered);
+        }
+
+        // 查看用户详情
+        function viewUserDetail(userId) {
+            alert('查看用户详情：' + userId);
+            // TODO: 实现用户详情页面
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

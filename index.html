@@ -40,7 +40,7 @@
 
         .nav-menu {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             list-style: none;
         }
 
@@ -48,6 +48,23 @@
             color: #333;
             text-decoration: none;
             font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            background: #f5f6f7;
+            color: #667eea;
+        }
+
+        .admin-link {
+            display: none !important;
+        }
+
+        .admin-link.visible {
+            display: block !important;
         }
 
         .user-info {
@@ -279,7 +296,10 @@
         <div class="navbar-brand">🚀 研发工作流程智能体</div>
         <ul class="nav-menu">
             <li><a href="index.html" class="active">首页</a></li>
-            <li><a href="admin.html">管理后台</a></li>
+            <li><a href="contacts.html">通讯录</a></li>
+            <li><a href="token-stats.html">Token 统计</a></li>
+            <li><a href="project-agent.html">智能体</a></li>
+            <li><a href="admin.html" class="admin-link" id="adminNavLink">管理后台</a></li>
         </ul>
         <div class="user-info">
             <div class="user-avatar" id="navAvatar">A</div>
@@ -393,9 +413,14 @@
                 window.location.href = 'login.html';
                 return;
             }
-            document.getElementById('navUsername').textContent = user.username;
-            document.getElementById('navRole').textContent = user.role === 'admin' ? '管理员' : user.position;
-            document.getElementById('navAvatar').textContent = user.username.charAt(0).toUpperCase();
+            document.getElementById('navUsername').textContent = user.name || user.username;
+            document.getElementById('navRole').textContent = (user.role === 'admin' || user.role === 'ceo' || user.role === 'manager') ? '管理员' : (user.position || '员工');
+            document.getElementById('navAvatar').textContent = (user.name || user.username).charAt(0).toUpperCase();
+            
+            // 权限控制：只有管理员可以看到管理后台
+            if (user.role === 'admin' || user.role === 'ceo' || user.role === 'manager') {
+                document.getElementById('adminNavLink').classList.add('visible');
+            }
         }
 
         // 加载项目列表

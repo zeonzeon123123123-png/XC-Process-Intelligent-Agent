@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token 使用统计 - XC 智能体系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f6f7;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background: #0066ff;
+            color: white;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            color: #0066ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 主内容区 */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* 页面标题 */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .time-range-selector {
+            display: flex;
+            gap: 8px;
+        }
+
+        .time-range-btn {
+            padding: 8px 16px;
+            border: 1px solid #e5e6eb;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .time-range-btn:hover,
+        .time-range-btn.active {
+            border-color: #0066ff;
+            color: #0066ff;
+            background: #e6f0ff;
+        }
+
+        /* 概览卡片 */
+        .overview-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .overview-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .card-label {
+            font-size: 14px;
+            color: #8f959e;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .card-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+        }
+
+        .trend-up {
+            color: #00b365;
+        }
+
+        .trend-down {
+            color: #f53f3f;
+        }
+
+        /* 内容区块 */
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        /* 搜索框 */
+        .search-box {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding: 10px 12px;
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            width: 300px;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #0066ff;
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background: #0066ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #0052cc;
+        }
+
+        /* 表格样式 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e6eb;
+        }
+
+        .data-table th {
+            background: #f5f6f7;
+            font-weight: 600;
+            font-size: 13px;
+            color: #646a73;
+        }
+
+        .data-table tr:hover {
+            background: #f5f6f7;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .rank-1 { background: #ffd700; color: #000; }
+        .rank-2 { background: #c0c0c0; color: #000; }
+        .rank-3 { background: #cd7f32; color: #fff; }
+        .rank-other { background: #f2f3f5; color: #646a73; }
+
+        .trend-arrow {
+            font-size: 16px;
+        }
+
+        .trend-up-arrow { color: #00b365; }
+        .trend-down-arrow { color: #f53f3f; }
+        .trend-stable { color: #8f959e; }
+
+        /* 权限提示 */
+        .permission-alert {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .permission-alert-icon {
+            font-size: 20px;
+        }
+
+        .permission-alert-text {
+            color: #d48806;
+            font-size: 14px;
+        }
+
+        .no-permission {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8f959e;
+        }
+
+        .no-permission-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fafafa;
+            border-radius: 6px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .overview-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">🤖 XC 智能体系统</div>
+            <nav class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="contacts.html">通讯录</a>
+                <a href="token-stats.html" class="active">Token 统计</a>
+                <a href="project-agent.html">智能体</a>
+                <a href="#" id="adminLink" style="display:none;">管理后台</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">用户</span>
+            </div>
+            <button onclick="logout()" style="background:none;border:none;color:white;cursor:pointer;">退出</button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <div class="main-container">
+        <div class="page-header">
+            <h1 class="page-title">📊 Token 使用统计</h1>
+            <div class="time-range-selector">
+                <button class="time-range-btn" onclick="setTimeRange('today')">今日</button>
+                <button class="time-range-btn active" onclick="setTimeRange('week')">最近 7 天</button>
+                <button class="time-range-btn" onclick="setTimeRange('month')">最近 30 天</button>
+                <button class="time-range-btn" onclick="setTimeRange('all')">全部</button>
+            </div>
+        </div>
+
+        <!-- 权限提示 -->
+        <div class="permission-alert" id="permissionAlert">
+            <span class="permission-alert-icon">ℹ️</span>
+            <span class="permission-alert-text" id="permissionText">您只能查看自己的 Token 使用情况</span>
+        </div>
+
+        <!-- 概览卡片 -->
+        <div class="overview-cards">
+            <div class="overview-card">
+                <div class="card-label">总 Token 用量</div>
+                <div class="card-value" id="totalTokens">1,234,567</div>
+                <div class="card-trend trend-up">
+                    <span>↑ 12.5%</span>
+                    <span style="color: #8f959e;">环比</span>
+                </div>
+            </div>
+            <div class="overview-card">
+                <div class="card-label">总调用次数</div>
+                <div class="card-value" id="totalCalls">8,456</div>
+                <div class="card-trend trend-up">
+                    <span>↑ 8.3%</span>
+                    <span style="color: #8f959e;">环比</span>
+                </div>
+            </div>
+            <div class="overview-card">
+                <div class="card-label">活跃用户数</div>
+                <div class="card-value" id="activeUsers">45</div>
+                <div class="card-trend trend-up">
+                    <span>↑ 3</span>
+                    <span style="color: #8f959e;">新增</span>
+                </div>
+            </div>
+            <div class="overview-card">
+                <div class="card-label">人均 Token 用量</div>
+                <div class="card-value" id="avgTokens">27,435</div>
+                <div class="card-trend trend-down">
+                    <span>↓ 2.1%</span>
+                    <span style="color: #8f959e;">环比</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 部门 Token 用量排行 -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">🏆 部门 Token 用量排行（实时更新）</h2>
+                <button class="search-btn" onclick="exportReport()">导出报表</button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>部门</th>
+                        <th>Token 用量</th>
+                        <th>占比</th>
+                        <th>趋势</th>
+                        <th>人均用量</th>
+                    </tr>
+                </thead>
+                <tbody id="departmentRanking">
+                    <!-- 动态生成 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 用户 Token 用量排行 -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">👤 用户 Token 用量排行</h2>
+                <div class="search-box" id="userSearchBox" style="display:none;">
+                    <input type="text" id="userSearchInput" placeholder="搜索姓名/工号/部门...">
+                    <button class="search-btn" onclick="searchUser()">搜索</button>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>姓名</th>
+                        <th>部门</th>
+                        <th>Token 用量</th>
+                        <th>调用次数</th>
+                        <th>活跃智能体</th>
+                    </tr>
+                </thead>
+                <tbody id="userRanking">
+                    <!-- 动态生成 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Token 使用趋势图 -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">📈 Token 使用趋势</h2>
+            </div>
+            <div class="chart-container">
+                <div style="text-align: center; color: #8f959e;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+                    <div>图表区域 - 可集成 Chart.js 或 ECharts</div>
+                    <div style="font-size: 13px; margin-top: 8px;">显示按日/周/月的 Token 使用趋势</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 当前用户信息
+        const currentUser = {
+            userId: 'USR-2026-001',
+            name: '张三',
+            department: '产品部',
+            position: '产品经理',
+            role: 'employee', // employee, supervisor, manager, ceo
+            avatar: '张'
+        };
+
+        // 模拟部门数据
+        const departmentData = [
+            { rank: 1, name: '软件部', tokens: 456789, percentage: 37.0, trend: 'up', avgTokens: 22839 },
+            { rank: 2, name: '硬件部', tokens: 312456, percentage: 25.3, trend: 'stable', avgTokens: 20830 },
+            { rank: 3, name: '测试部', tokens: 198234, percentage: 16.1, trend: 'up', avgTokens: 16519 },
+            { rank: 4, name: '产品部', tokens: 123456, percentage: 10.0, trend: 'down', avgTokens: 10288 },
+            { rank: 5, name: '项目部', tokens: 87654, percentage: 7.1, trend: 'stable', avgTokens: 10956 },
+            { rank: 6, name: '结构部', tokens: 55978, percentage: 4.5, trend: 'down', avgTokens: 5597 }
+        ];
+
+        // 模拟用户数据
+        const userData = [
+            { rank: 1, name: '张三', department: '软件部', tokens: 45678, calls: 1234, agents: 5 },
+            { rank: 2, name: '李四', department: '硬件部', tokens: 38456, calls: 987, agents: 4 },
+            { rank: 3, name: '王五', department: '测试部', tokens: 32123, calls: 856, agents: 6 },
+            { rank: 4, name: '赵六', department: '产品部', tokens: 28900, calls: 756, agents: 3 },
+            { rank: 5, name: '钱七', department: '软件部', tokens: 25600, calls: 678, agents: 5 },
+            { rank: 6, name: '孙八', department: '硬件部', tokens: 22340, calls: 589, agents: 4 },
+            { rank: 7, name: '周九', department: '测试部', tokens: 19870, calls: 512, agents: 3 },
+            { rank: 8, name: '吴十', department: '结构部', tokens: 17650, calls: 467, agents: 2 }
+        ];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            checkPermission();
+            renderDepartmentRanking();
+            renderUserRanking();
+        });
+
+        // 加载用户信息
+        function loadUserInfo() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                Object.assign(currentUser, JSON.parse(savedUser));
+            }
+            document.getElementById('userAvatar').textContent = currentUser.avatar || currentUser.name[0];
+            document.getElementById('userName').textContent = currentUser.name;
+        }
+
+        // 检查权限
+        function checkPermission() {
+            const alertBox = document.getElementById('permissionAlert');
+            const permissionText = document.getElementById('permissionText');
+            const userSearchBox = document.getElementById('userSearchBox');
+            const adminLink = document.getElementById('adminLink');
+
+            if (currentUser.role === 'ceo') {
+                // 总经理：查看全公司，可搜索
+                alertBox.style.display = 'none';
+                userSearchBox.style.display = 'flex';
+                adminLink.style.display = 'block';
+                permissionText.textContent = '您可以查看全公司所有员工的 Token 使用情况';
+            } else if (currentUser.role === 'manager') {
+                // 部门经理：查看本部门
+                alertBox.style.display = 'flex';
+                userSearchBox.style.display = 'none';
+                permissionText.textContent = `您可以查看 ${currentUser.department} 所有员工的 Token 使用情况`;
+            } else if (currentUser.role === 'supervisor') {
+                // 主管：查看自己和直接下属
+                alertBox.style.display = 'flex';
+                userSearchBox.style.display = 'none';
+                permissionText.textContent = '您可以查看自己及直接下属的 Token 使用情况';
+            } else {
+                // 普通员工：仅查看自己
+                alertBox.style.display = 'flex';
+                userSearchBox.style.display = 'none';
+                permissionText.textContent = '您只能查看自己的 Token 使用情况';
+                
+                // 隐藏部门排行（普通员工不可见）
+                document.querySelector('.section').style.display = 'none';
+            }
+        }
+
+        // 渲染部门排行
+        function renderDepartmentRanking() {
+            const tbody = document.getElementById('departmentRanking');
+            tbody.innerHTML = departmentData.map(dept => `
+                <tr>
+                    <td>
+                        <span class="rank-badge rank-${dept.rank <= 3 ? dept.rank : 'other'}">${dept.rank}</span>
+                    </td>
+                    <td><strong>${dept.name}</strong></td>
+                    <td>${dept.tokens.toLocaleString()}</td>
+                    <td>${dept.percentage}%</td>
+                    <td>
+                        <span class="trend-arrow ${getTrendClass(dept.trend)}">${getTrendArrow(dept.trend)}</span>
+                    </td>
+                    <td>${dept.avgTokens.toLocaleString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // 渲染用户排行
+        function renderUserRanking() {
+            const tbody = document.getElementById('userRanking');
+            tbody.innerHTML = userData.map(user => `
+                <tr>
+                    <td>
+                        <span class="rank-badge rank-${user.rank <= 3 ? user.rank : 'other'}">${user.rank}</span>
+                    </td>
+                    <td><strong>${user.name}</strong></td>
+                    <td>${user.department}</td>
+                    <td>${user.tokens.toLocaleString()}</td>
+                    <td>${user.calls.toLocaleString()}</td>
+                    <td>${user.agents}</td>
+                </tr>
+            `).join('');
+        }
+
+        // 获取趋势样式
+        function getTrendClass(trend) {
+            const map = {
+                'up': 'trend-up-arrow',
+                'down': 'trend-down-arrow',
+                'stable': 'trend-stable'
+            };
+            return map[trend] || 'trend-stable';
+        }
+
+        // 获取趋势箭头
+        function getTrendArrow(trend) {
+            const map = {
+                'up': '↑',
+                'down': '↓',
+                'stable': '→'
+            };
+            return map[trend] || '→';
+        }
+
+        // 设置时间范围
+        function setTimeRange(range) {
+            document.querySelectorAll('.time-range-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            // TODO: 根据时间范围重新加载数据
+            console.log('Time range changed to:', range);
+        }
+
+        // 搜索用户
+        function searchUser() {
+            const keyword = document.getElementById('userSearchInput').value.toLowerCase();
+            const filtered = userData.filter(u => 
+                u.name.toLowerCase().includes(keyword) ||
+                u.department.toLowerCase().includes(keyword)
+            );
+            console.log('Search result:', filtered);
+            alert('搜索功能演示：找到 ' + filtered.length + ' 个结果');
+        }
+
+        // 导出报表
+        function exportReport() {
+            alert('导出报表功能：生成 Excel 文件');
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
