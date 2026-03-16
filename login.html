@@ -279,6 +279,21 @@
             <!-- 登录表单 -->
             <div id="loginForm">
                 <h2 class="form-title">欢迎回来</h2>
+                
+                <!-- 默认账号提示 -->
+                <div style="background: #e6f0ff; border: 1px solid #0066ff; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+                    <div style="display: flex; align-items: start; gap: 12px;">
+                        <span style="font-size: 20px;">ℹ️</span>
+                        <div>
+                            <div style="font-weight: 600; color: #0066ff; margin-bottom: 8px;">默认管理员账号</div>
+                            <div style="font-size: 13px; color: #646a73; line-height: 1.8;">
+                                <div><strong>邮箱：</strong>admin@xc.com</div>
+                                <div><strong>密码：</strong>Admin@123456</div>
+                                <div style="margin-top: 8px; color: #8f959e;">角色：总经理（可访问管理后台）</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>邮箱 <span class="required">*</span></label>
@@ -392,7 +407,59 @@
 
     <script>
         // 模拟用户数据库
-        const userDatabase = [];
+        const userDatabase = [
+            // 默认管理员账号
+            {
+                userId: 'USR-2026-001',
+                name: '系统管理员',
+                employeeId: 'EMP-0001',
+                email: 'admin@xc.com',
+                phone: '13800138000',
+                department: '管理层',
+                position: '总经理',
+                manager: null,
+                role: 'ceo',
+                password: btoa('Admin@123456'),
+                avatar: '系',
+                status: 'active'
+            },
+            // 部门经理账号
+            {
+                userId: 'USR-2026-002',
+                name: '张经理',
+                employeeId: 'EMP-0002',
+                email: 'manager@xc.com',
+                phone: '13800138001',
+                department: '产品部',
+                position: '产品总监',
+                manager: '系统管理员',
+                role: 'manager',
+                password: btoa('Manager@123'),
+                avatar: '张',
+                status: 'active'
+            },
+            // 普通员工账号
+            {
+                userId: 'USR-2026-003',
+                name: '李员工',
+                employeeId: 'EMP-0003',
+                email: 'user@xc.com',
+                phone: '13800138002',
+                department: '软件部',
+                position: '软件工程师',
+                manager: '张经理',
+                role: 'employee',
+                password: btoa('User@123'),
+                avatar: '李',
+                status: 'active'
+            }
+        ];
+        
+        // 预存到 localStorage（首次访问时）
+        if (!localStorage.getItem('defaultUsersInitialized')) {
+            localStorage.setItem('defaultUsers', JSON.stringify(userDatabase));
+            localStorage.setItem('defaultUsersInitialized', 'true');
+        }
 
         // 显示注册表单
         function showRegister() {
@@ -506,28 +573,38 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             
-            // 模拟登录验证
-            // 实际应从后端 API 获取
-            const user = userDatabase.find(u => u.email === email && u.password === btoa(password));
+            // 从 localStorage 获取用户数据库
+            const storedUsers = JSON.parse(localStorage.getItem('defaultUsers') || '[]');
+            const allUsers = [...userDatabase, ...storedUsers];
+            
+            // 查找用户
+            const user = allUsers.find(u => u.email === email && u.password === btoa(password));
             
             if (user) {
                 localStorage.setItem('currentUser', JSON.stringify(user));
-                alert('登录成功！');
-                window.location.href = 'index.html';
+                
+                // 根据角色显示不同提示
+                let roleText = '';
+                if (user.role === 'ceo' || user.role === 'admin') {
+                    roleText = '管理员';
+                } else if (user.role === 'manager') {
+                    roleText = '部门经理';
+                } else {
+                    roleText = '用户';
+                }
+                
+                alert('登录成功！欢迎，' + user.name + ' (' + roleText + ')');
+                
+                // 管理员跳转到管理后台，其他人跳转到首页
+                if (user.role === 'ceo' || user.role === 'admin' || user.role === 'manager') {
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 500);
+                } else {
+                    window.location.href = 'index.html';
+                }
             } else {
-                // 演示用：允许任意登录
-                const demoUser = {
-                    userId: 'USR-2026-001',
-                    name: email.split('@')[0],
-                    email: email,
-                    department: '产品部',
-                    position: '员工',
-                    role: 'employee',
-                    avatar: email[0].toUpperCase(),
-                    status: 'active'
-                };
-                localStorage.setItem('currentUser', JSON.stringify(demoUser));
-                window.location.href = 'index.html';
+                alert('登录失败：邮箱或密码错误\n\n提示：请使用默认管理员账号登录\n邮箱：admin@xc.com\n密码：Admin@123456');
             }
         }
 
