@@ -10,8 +10,8 @@ const WorkflowConfig = {
   hardware_product: {
     name: '硬件产品开发',
     code: 'hardware_product',
-    description: '完整的硬件产品开发流程，包含所有 5 个部门',
-    departmentOrder: ['产品部', '项目部', '软件部', '硬件部', '结构部'],
+    description: '完整的硬件产品开发流程，包含所有 6 个部门',
+    departmentOrder: ['产品部', '项目部', '硬件部', '结构部', '软件部', '测试部'],
     subfolders: {
       '产品部': [
         '市场需求',
@@ -25,25 +25,38 @@ const WorkflowConfig = {
         '进度报告',
         '验收文档'
       ],
-      '软件部': [
-        '需求分析',
-        '设计文档',
-        'API 文档',
-        '版本发布',
-        '代码评审'
-      ],
       '硬件部': [
         '原理图',
         'PCB 设计',
         'BOM 表',
-        '测试报告',
+        'EVT 报告',
+        'DVT 报告',
+        'PVT 报告',
         '问题跟踪'
       ],
       '结构部': [
         'ID 设计',
         '结构设计',
         '模具开发',
-        '手板管理'
+        '手板管理',
+        '包装设计'
+      ],
+      '软件部': [
+        '需求分析',
+        '设计文档',
+        'API 文档',
+        '版本发布',
+        '代码评审',
+        '固件发布'
+      ],
+      '测试部': [
+        '测试计划',
+        '测试用例',
+        'EVT 测试',
+        'DVT 测试',
+        'PVT 测试',
+        '认证测试',
+        '问题跟踪'
       ]
     },
     // 公共文件夹子文件夹
@@ -61,8 +74,8 @@ const WorkflowConfig = {
   software_only: {
     name: '纯软件开发',
     code: 'software_only',
-    description: '仅涉及软件开发的流程，不包含硬件和结构部门',
-    departmentOrder: ['产品部', '项目部', '软件部'],
+    description: '仅涉及软件开发的流程，不包含硬件、结构和测试部门',
+    departmentOrder: ['产品部', '项目部', '软件部', '测试部'],
     subfolders: {
       '产品部': [
         '市场需求',
@@ -82,6 +95,12 @@ const WorkflowConfig = {
         'API 文档',
         '版本发布',
         '代码评审'
+      ],
+      '测试部': [
+        '测试计划',
+        '测试用例',
+        '测试报告',
+        '问题跟踪'
       ]
     },
     commonSubfolders: [
@@ -98,8 +117,8 @@ const WorkflowConfig = {
   hardware_only: {
     name: '硬件开发',
     code: 'hardware_only',
-    description: '仅涉及硬件开发的流程，不包含软件部门',
-    departmentOrder: ['产品部', '项目部', '硬件部', '结构部'],
+    description: '仅涉及硬件和结构的流程，不包含软件部门',
+    departmentOrder: ['产品部', '项目部', '硬件部', '结构部', '测试部'],
     subfolders: {
       '产品部': [
         '市场需求',
@@ -117,14 +136,25 @@ const WorkflowConfig = {
         '原理图',
         'PCB 设计',
         'BOM 表',
-        '测试报告',
+        'EVT 报告',
+        'DVT 报告',
+        'PVT 报告',
         '问题跟踪'
       ],
       '结构部': [
         'ID 设计',
         '结构设计',
         '模具开发',
-        '手板管理'
+        '手板管理',
+        '包装设计'
+      ],
+      '测试部': [
+        '测试计划',
+        '测试用例',
+        'EVT 测试',
+        'DVT 测试',
+        'PVT 测试',
+        '问题跟踪'
       ]
     },
     commonSubfolders: [
@@ -142,7 +172,7 @@ const WorkflowConfig = {
     name: '结构设计',
     code: 'structure_only',
     description: '仅涉及结构设计的流程',
-    departmentOrder: ['产品部', '项目部', '结构部'],
+    departmentOrder: ['产品部', '项目部', '结构部', '测试部'],
     subfolders: {
       '产品部': [
         '市场需求',
@@ -160,7 +190,14 @@ const WorkflowConfig = {
         'ID 设计',
         '结构设计',
         '模具开发',
-        '手板管理'
+        '手板管理',
+        '包装设计'
+      ],
+      '测试部': [
+        '测试计划',
+        '测试用例',
+        '结构测试',
+        '问题跟踪'
       ]
     },
     commonSubfolders: [
@@ -360,6 +397,50 @@ const DocumentTypes = {
     department: '结构部',
     description: 'Mold Development Document',
     templates: ['模具开发_v1.0_模板.docx']
+  },
+  
+  // 测试部文档
+  '测试计划': {
+    code: '测试计划',
+    name: '测试计划',
+    department: '测试部',
+    description: 'Test Plan',
+    templates: ['测试计划_v1.0_模板.docx']
+  },
+  '测试用例': {
+    code: '测试用例',
+    name: '测试用例',
+    department: '测试部',
+    description: 'Test Case',
+    templates: ['测试用例_v1.0_模板.xlsx']
+  },
+  'EVT 测试': {
+    code: 'EVT 测试',
+    name: 'EVT 测试报告',
+    department: '测试部',
+    description: 'EVT Test Report',
+    templates: ['EVT 测试_v1.0_模板.docx']
+  },
+  'DVT 测试': {
+    code: 'DVT 测试',
+    name: 'DVT 测试报告',
+    department: '测试部',
+    description: 'DVT Test Report',
+    templates: ['DVT 测试_v1.0_模板.docx']
+  },
+  'PVT 测试': {
+    code: 'PVT 测试',
+    name: 'PVT 测试报告',
+    department: '测试部',
+    description: 'PVT Test Report',
+    templates: ['PVT 测试_v1.0_模板.docx']
+  },
+  '认证测试': {
+    code: '认证测试',
+    name: '认证测试报告',
+    department: '测试部',
+    description: 'Certification Test Report',
+    templates: ['认证测试_v1.0_模板.docx']
   },
   
   // 通用文档
