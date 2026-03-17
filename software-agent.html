@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software智能体 - 研发工作流程智能体</title>
+    <title>软件部智能体 - 研发工作流程智能体</title>
     <style>
         * {
             margin: 0;
@@ -85,8 +85,9 @@
         }
 
         /* 主内容区 */
-        .main-container {
+        .content-wrapper {
             max-width: 1400px;
+            margin-top: 100px;
             margin: 0 auto;
             padding: 24px;
         }
@@ -563,32 +564,13 @@
             color: #8f959e;
         }
     </style>
+    <script src="js/navbar.js" defer></script>
 </head>
 <body>
     <!-- 顶部导航栏 -->
-    <header class="header">
-        <div class="header-left">
-            <div class="logo">💻 软件部智能体</div>
-            <nav class="nav-links">
-                <a href="index.html">首页</a>
-                <a href="contacts.html">通讯录</a>
-                <a href="token-stats.html">Token 统计</a>
-                <a href="project-agent.html">智能体</a>
-                <a href="interaction-center.html">交互中心</a>
-                <a href="admin.html" id="adminLink" style="display:none;">管理后台</a>
-            </nav>
-        </div>
-        <div class="header-right">
-            <div class="user-info">
-                <div class="user-avatar" id="userAvatar">U</div>
-                <span id="userName">用户</span>
-            </div>
-            <button onclick="logout()" style="background:none;border:none;color:white;cursor:pointer;">退出</button>
-        </div>
-    </header>
 
     <!-- 主内容区 -->
-    <div class="main-container">
+    <div class="content-wrapper">
         <!-- 页面标题 -->
         <div class="page-header">
             <h1 class="page-title">💻 软件部智能体</h1>
