@@ -433,11 +433,11 @@
         <aside class="sidebar">
             <div class="menu-section">
                 <div class="menu-title">系统概览</div>
-                <div class="menu-item active" onclick="showSection('dashboard')">
+                <div class="menu-item active" onclick="showSection('dashboard', event)">
                     <span class="menu-icon">📊</span>
                     <span>仪表盘</span>
                 </div>
-                <div class="menu-item" onclick="showSection('users')">
+                <div class="menu-item" onclick="showSection('users', event)">
                     <span class="menu-icon">👥</span>
                     <span>用户管理</span>
                 </div>
@@ -445,11 +445,11 @@
 
             <div class="menu-section">
                 <div class="menu-title">代码管理</div>
-                <div class="menu-item" onclick="showSection('code-viewer')">
+                <div class="menu-item" onclick="showSection('code-viewer', event)">
                     <span class="menu-icon">📁</span>
                     <span>文件浏览器</span>
                 </div>
-                <div class="menu-item" onclick="showSection('config')">
+                <div class="menu-item" onclick="showSection('config', event)">
                     <span class="menu-icon">⚙️</span>
                     <span>系统配置</span>
                 </div>
@@ -457,11 +457,11 @@
 
             <div class="menu-section">
                 <div class="menu-title">监控</div>
-                <div class="menu-item" onclick="showSection('logs')">
+                <div class="menu-item" onclick="showSection('logs', event)">
                     <span class="menu-icon">📝</span>
                     <span>系统日志</span>
                 </div>
-                <div class="menu-item" onclick="showSection('tokens')">
+                <div class="menu-item" onclick="showSection('tokens', event)">
                     <span class="menu-icon">💰</span>
                     <span>Token 监控</span>
                 </div>
@@ -469,7 +469,7 @@
 
             <div class="menu-section">
                 <div class="menu-title">智能体</div>
-                <div class="menu-item" onclick="showSection('agents')">
+                <div class="menu-item" onclick="showSection('agents', event)">
                     <span class="menu-icon">🤖</span>
                     <span>智能体配置</span>
                 </div>
@@ -950,7 +950,7 @@ CREATE TABLE token_usage (
         }
 
         // 切换区块
-        function showSection(section) {
+        function showSection(section, event) {
             // 隐藏所有区块
             document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
             
@@ -962,7 +962,9 @@ CREATE TABLE token_usage (
             
             // 更新菜单激活状态
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
         }
 
         // 加载文件
