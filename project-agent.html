@@ -295,59 +295,94 @@
                 <h2 class="section-title">项目阶段流程</h2>
             </div>
             <div class="workflow-list">
+                <!-- 第一阶段：产品提案 -->
                 <div class="stage-item completed">
                     <span class="stage-icon">✅</span>
                     <div class="stage-content">
-                        <div class="stage-name">立项</div>
-                        <div class="stage-desc">立项书审批</div>
+                        <div class="stage-name">产品提案</div>
+                        <div class="stage-desc">客户需求、市场分析、用户反馈、竞品分析 → 产品提案、MRD、竞品分析报告</div>
                     </div>
                     <span class="stage-status status-completed">已完成</span>
                 </div>
+                
+                <!-- 第二阶段：PRD阶段 -->
                 <div class="stage-item completed">
                     <span class="stage-icon">✅</span>
                     <div class="stage-content">
-                        <div class="stage-name">规划</div>
-                        <div class="stage-desc">项目章程确认</div>
+                        <div class="stage-name">PRD编写与评审</div>
+                        <div class="stage-desc">PRD编写 → PRD评审 → PRD确认</div>
                     </div>
                     <span class="stage-status status-completed">已完成</span>
                 </div>
+                
+                <!-- 第三阶段：项目立项 -->
                 <div class="stage-item active">
                     <span class="stage-icon">🔄</span>
                     <div class="stage-content">
-                        <div class="stage-name">设计</div>
-                        <div class="stage-desc">设计评审通过</div>
+                        <div class="stage-name">项目立项</div>
+                        <div class="stage-desc">制定研发计划&amp;项目负责人名单 → 项目立项（项目章程、schedule、立项书）</div>
                     </div>
                     <span class="stage-status status-active">进行中</span>
                 </div>
+                
+                <!-- 第四阶段：设计阶段 -->
+                <div class="stage-item">
+                    <span class="stage-icon">📐</span>
+                    <div class="stage-content">
+                        <div class="stage-name">设计阶段</div>
+                        <div class="stage-desc">
+                            <div style="margin-top:8px;">
+                                <div>• SCH设计 → SCH评审 → SCH优化 → PCB布局 → PCB评审 → PCB布线 → PCB评审</div>
+                                <div>• 软件架构设计 → 软件架构评审 → 优化 → 评审</div>
+                                <div>• 结构试模 → 评审</div>
+                                <div>• 包装设计 → 评审</div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="stage-status status-pending">待开始</span>
+                </div>
+                
+                <!-- 第五阶段：EVT -->
                 <div class="stage-item">
                     <span class="stage-icon">🔧</span>
                     <div class="stage-content">
-                        <div class="stage-name">EVT</div>
-                        <div class="stage-desc">工程验证</div>
+                        <div class="stage-name">EVT（工程验证）</div>
+                        <div class="stage-desc">工厂EVT试产 → EVT检验 → 问题反馈&amp;优化 → EVT评审 → 进入DVT</div>
                     </div>
                     <span class="stage-status status-pending">待开始</span>
                 </div>
+                
+                <!-- 第六阶段：DVT -->
                 <div class="stage-item">
                     <span class="stage-icon">🔬</span>
                     <div class="stage-content">
-                        <div class="stage-name">DVT</div>
-                        <div class="stage-desc">设计验证</div>
+                        <div class="stage-name">DVT（设计验证）</div>
+                        <div class="stage-desc">
+                            <div style="margin-top:8px;">
+                                <div>• DVT验证 → 问题反馈&amp;优化 → DVT评审</div>
+                                <div>• 模具验收、启动认证、专利申请、物料承认</div>
+                            </div>
+                        </div>
                     </div>
                     <span class="stage-status status-pending">待开始</span>
                 </div>
+                
+                <!-- 第七阶段：PVT -->
                 <div class="stage-item">
                     <span class="stage-icon">🏭</span>
                     <div class="stage-content">
-                        <div class="stage-name">PVT</div>
-                        <div class="stage-desc">生产验证</div>
+                        <div class="stage-name">PVT（生产验证）</div>
+                        <div class="stage-desc">工厂PVT生产 → PVT验证 → 问题反馈&amp;优化 → PVT评审 → 进入MP</div>
                     </div>
                     <span class="stage-status status-pending">待开始</span>
                 </div>
+                
+                <!-- 第八阶段：MP -->
                 <div class="stage-item">
                     <span class="stage-icon">🚀</span>
                     <div class="stage-content">
-                        <div class="stage-name">MP</div>
-                        <div class="stage-desc">量产</div>
+                        <div class="stage-name">MP（量产）</div>
+                        <div class="stage-desc">生产爬坡 → 项目资料归档 → 项目结项</div>
                     </div>
                     <span class="stage-status status-pending">待开始</span>
                 </div>
