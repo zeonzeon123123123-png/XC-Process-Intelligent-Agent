@@ -24,12 +24,20 @@ body {
     height: 70px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+}
+
+.navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1400px;
 }
 
 .navbar-brand {
@@ -40,10 +48,19 @@ body {
     align-items: center;
     gap: 10px;
     text-decoration: none;
+    flex-shrink: 0;
 }
 
 .navbar-brand:hover {
     color: #764ba2;
+}
+
+.nav-menu-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    margin: 0 20px;
 }
 
 .nav-menu {
@@ -51,6 +68,27 @@ body {
     gap: 8px;
     list-style: none;
     align-items: center;
+    justify-content: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 .nav-menu li {
