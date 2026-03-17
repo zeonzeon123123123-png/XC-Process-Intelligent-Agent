@@ -65,10 +65,7 @@ function generateNavbar(currentPage, currentUser) {
             </div>
             <div class="user-info">
                 <div class="user-avatar" id="navAvatar">${avatar}</div>
-                <div>
-                    <div style="font-weight: 600; color: #333;" id="navUsername">${username}</div>
-                    <div style="font-size: 12px; color: #666;" id="navRole">${currentUser?.role || '用户'}</div>
-                </div>
+                <div style="font-weight: 600; color: #333;" id="navUsername">${username}</div>
                 <button onclick="logout()" style="margin-left: 10px; padding: 8px 16px; background: #ffebee; color: #c62828; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">退出</button>
             </div>
         </div>
@@ -112,7 +109,6 @@ function initNavbar() {
     if (currentUser) {
         document.getElementById('navAvatar').textContent = currentUser.avatar || currentUser.name[0].toUpperCase();
         document.getElementById('navUsername').textContent = currentUser.name;
-        document.getElementById('navRole').textContent = getRoleName(currentUser.role);
     }
 }
 
