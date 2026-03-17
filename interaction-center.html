@@ -7,6 +7,66 @@
     <link rel="stylesheet" href="css/common.css">
     <style>
         /* 交互中心页面特殊样式 */
+        
+        /* 横向流程图 */
+        .flow-diagram {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        .flow-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d2129;
+            margin-bottom: 24px;
+        }
+
+        .flow-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: #f7f8fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 100px;
+        }
+
+        .flow-node:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .flow-node .icon {
+            font-size: 32px;
+        }
+
+        .flow-node .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .flow-arrow {
+            font-size: 24px;
+            color: #8f959e;
+            font-weight: bold;
+        }
+
         .interaction-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -184,26 +244,34 @@
         <div class="flow-diagram">
             <h3 class="flow-title">📊 智能体交互联动流程</h3>
             <div class="flow-content">
-                <div class="flow-row">
-                    <div class="flow-node product" onclick="location.href='product-agent.html'">📊 产品部</div>
-                    <span class="flow-arrow">→</span>
-                    <div class="flow-node project" onclick="location.href='project-agent.html'">📋 项目部</div>
+                <div class="flow-node" onclick="location.href='product-agent.html'">
+                    <span class="icon">📊</span>
+                    <span class="label">产品部</span>
                 </div>
-                <div class="flow-row">
-                    <span class="flow-arrow down">↓ 需求分发</span>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node" onclick="location.href='project-agent.html'">
+                    <span class="icon">📋</span>
+                    <span class="label">项目部</span>
                 </div>
-                <div class="flow-row">
-                    <div class="flow-node hardware" onclick="location.href='hardware-agent.html'">🔧 硬件部</div>
-                    <span class="flow-arrow">↔</span>
-                    <div class="flow-node software" onclick="location.href='software-agent.html'">💻 软件部</div>
-                    <span class="flow-arrow">↔</span>
-                    <div class="flow-node structure" onclick="location.href='structure-agent.html'">🏗️ 结构部</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node" onclick="location.href='hardware-agent.html'">
+                    <span class="icon">🔧</span>
+                    <span class="label">硬件部</span>
                 </div>
-                <div class="flow-row">
-                    <span class="flow-arrow down">↓ 测试申请</span>
+                <span class="flow-arrow">↔</span>
+                <div class="flow-node" onclick="location.href='software-agent.html'">
+                    <span class="icon">💻</span>
+                    <span class="label">软件部</span>
                 </div>
-                <div class="flow-row">
-                    <div class="flow-node test" onclick="location.href='test-agent.html'">✅ 测试部</div>
+                <span class="flow-arrow">↔</span>
+                <div class="flow-node" onclick="location.href='structure-agent.html'">
+                    <span class="icon">🏗️</span>
+                    <span class="label">结构部</span>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-node" onclick="location.href='test-agent.html'">
+                    <span class="icon">✅</span>
+                    <span class="label">测试部</span>
                 </div>
             </div>
         </div>

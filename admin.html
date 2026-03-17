@@ -326,7 +326,6 @@
             flex: 1;
         }
     </style>
-<script src="js/navbar.js" defer></script>
 </head>
 <body>
     <!-- 顶部导航栏 -->
@@ -745,110 +744,6 @@
 
         // 模拟文件内容
         const fileContents = {
-            'login.html': `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>登录 - XC 智能体系统</title>
-<script src="js/navbar.js" defer></script>
-</head>
-<body>
-    <!-- 登录表单 -->
-    <form onsubmit="handleLogin(event)">
-        <input type="email" placeholder="邮箱" required>
-        <input type="password" placeholder="密码" required>
-        <button type="submit">登录</button>
-    </form>
-</body>
-</html>`,
-            'README.md': `# XC-Process-Intelligent-Agent
-
-研发工作流程智能体系统 - 企业级智能体协作平台
-
-## 功能特性
-
-- 🔐 用户注册与登录
-- 📇 企业通讯录
-- 📊 Token 使用统计
-- 🤖 9 大专业智能体
-
-## 快速开始
-
-\`\`\`bash
-git clone https://github.com/zeonzeon123123123-png/XC-Process-Intelligent-Agent.git
-npm install
-npm start
-\`\`\``,
-            'schema.sql': `-- 用户信息表
-CREATE TABLE users (
-  user_id VARCHAR(20) PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  department_id VARCHAR(20) NOT NULL,
-  role ENUM('employee', 'supervisor', 'manager', 'ceo') NOT NULL
-);
-
--- Token 使用记录表
-CREATE TABLE token_usage (
-  record_id VARCHAR(30) PRIMARY KEY,
-  user_id VARCHAR(20) NOT NULL,
-  total_tokens INT NOT NULL,
-  request_time DATETIME NOT NULL
-);`
-        };
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAdminPermission();
-            loadUserInfo();
-            loadUserTable();
-        });
-
-        // 检查管理员权限
-        function checkAdminPermission() {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-            if (user.role !== 'admin' && user.role !== 'ceo' && user.role !== 'manager') {
-                alert('无权访问管理后台');
-                window.location.href = 'index.html';
-            }
-        }
-
-        // 加载用户信息
-        function loadUserInfo() {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            document.getElementById('userAvatar').textContent = user.avatar || user.name[0];
-            document.getElementById('userName').textContent = user.name;
-        }
-
-        // 加载用户表格
-        function loadUserTable() {
-            const tbody = document.getElementById('userTable');
-            tbody.innerHTML = users.map(u => `
-                <tr>
-                    <td>${u.userId}</td>
-                    <td><strong>${u.name}</strong></td>
-                    <td>${u.department}</td>
-                    <td>${u.position}</td>
-                    <td><span class="role-badge role-${u.role}">${getRoleName(u.role)}</span></td>
-                    <td><span class="role-badge role-${u.status === 'active' ? 'admin' : 'employee'}">${u.status === 'active' ? '在职' : '离职'}</span></td>
-                    <td>
-                        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="editUser('${u.userId}')">编辑</button>
-                        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px; color: #c62828;" onclick="deleteUser('${u.userId}')">删除</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // 获取角色名称
-        function getRoleName(role) {
-            const map = {
-                'admin': '管理员',
-                'ceo': '总经理',
-                'manager': '部门经理',
                 'supervisor': '主管',
                 'employee': '员工'
             };
