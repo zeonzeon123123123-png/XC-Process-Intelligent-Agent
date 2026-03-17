@@ -1,0 +1,71 @@
+{
+  "storage": {
+    "provider": "github",
+    "github": {
+      "repo": "zeonzeon123123123-png/XC-Process-Intelligent-Agent",
+      "branch": "main",
+      "basePath": "projects",
+      "token": "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"
+    },
+    "feishu": {
+      "folderToken": "",
+      "driveType": "normal"
+    }
+  },
+  "workflows": {
+    "hardware_product": {
+      "name": "硬件产品开发",
+      "departmentOrder": ["产品部", "项目部", "软件部", "硬件部", "结构部"],
+      "subfolders": {
+        "产品部": ["市场需求", "PRD", "竞品分析", "评审记录"],
+        "项目部": ["项目计划", "风险管理", "进度报告", "验收文档"],
+        "软件部": ["需求分析", "设计文档", "API 文档", "版本发布", "代码评审"],
+        "硬件部": ["原理图", "PCB 设计", "BOM 表", "测试报告", "问题跟踪"],
+        "结构部": ["ID 设计", "结构设计", "模具开发", "手板管理"]
+      }
+    },
+    "software_only": {
+      "name": "纯软件开发",
+      "departmentOrder": ["产品部", "项目部", "软件部"],
+      "subfolders": {
+        "产品部": ["市场需求", "PRD", "竞品分析", "评审记录"],
+        "项目部": ["项目计划", "风险管理", "进度报告", "验收文档"],
+        "软件部": ["需求分析", "设计文档", "API 文档", "版本发布", "代码评审"]
+      }
+    },
+    "hardware_only": {
+      "name": "硬件开发",
+      "departmentOrder": ["产品部", "项目部", "硬件部", "结构部"],
+      "subfolders": {
+        "产品部": ["市场需求", "PRD", "竞品分析", "评审记录"],
+        "项目部": ["项目计划", "风险管理", "进度报告", "验收文档"],
+        "硬件部": ["原理图", "PCB 设计", "BOM 表", "测试报告", "问题跟踪"],
+        "结构部": ["ID 设计", "结构设计", "模具开发", "手板管理"]
+      }
+    },
+    "structure_only": {
+      "name": "结构设计",
+      "departmentOrder": ["产品部", "项目部", "结构部"],
+      "subfolders": {
+        "产品部": ["市场需求", "PRD", "竞品分析", "评审记录"],
+        "项目部": ["项目计划", "风险管理", "进度报告", "验收文档"],
+        "结构部": ["ID 设计", "结构设计", "模具开发", "手板管理"]
+      }
+    }
+  },
+  "fileManagement": {
+    "autoNumbering": true,
+    "autoNaming": true,
+    "versioning": {
+      "enabled": true,
+      "maxHistoryVersions": 10,
+      "retentionDays": 365
+    },
+    "trash": {
+      "enabled": true,
+      "retentionDays": 30
+    },
+    "namingFormat": "{docType}_v{version}_{creator}_{date}",
+    "dateFormat": "YYYYMMDD"
+  }
+}
