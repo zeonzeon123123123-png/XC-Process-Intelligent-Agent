@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>测试部智能体 - 研发工作流程智能体</title>
+    <link rel="stylesheet" href="css/common.css">
+    <script src="js/navbar.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -380,26 +382,29 @@
         .test-flow {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 20px;
+            justify-content: center;
+            padding: 30px 20px;
             background: #f5f6f7;
             border-radius: 8px;
             margin-bottom: 20px;
+            gap: 0;
         }
 
         .flow-step {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            flex: 1;
+            gap: 12px;
+            min-width: 80px;
         }
 
         .flow-step:not(:last-child)::after {
             content: '→';
-            font-size: 20px;
+            font-size: 24px;
             color: #8f959e;
-            margin-left: 20px;
+            margin: 0 8px;
+            align-self: center;
+            margin-top: 20px;
         }
 
         .flow-icon {

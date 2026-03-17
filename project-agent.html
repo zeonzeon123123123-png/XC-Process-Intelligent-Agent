@@ -7,40 +7,57 @@
     <link rel="stylesheet" href="css/common.css">
     <script src="js/navbar.js" defer></script>
     <style>
-        /* 项目部智能体页面特殊样式 */
-        
         /* 项目状态概览 */
-        .project-overview {
-            display: flex;
-            justify-content: space-between;
-            padding: 24px;
+        .overview-section {
             background: white;
             border-radius: 12px;
+            padding: 24px 32px;
             margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        .overview-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .overview-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d2129;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
         }
 
         .overview-item {
             text-align: left;
         }
 
+        .overview-label {
+            font-size: 14px;
+            color: #8f959e;
+            margin-bottom: 8px;
+        }
+
         .overview-value {
             font-size: 28px;
             font-weight: 700;
             color: #1d2129;
-            margin-bottom: 8px;
-        }
-
-        .overview-label {
-            font-size: 14px;
-            color: #8f959e;
         }
 
         /* 项目部文档 */
         .docs-section {
             background: white;
             border-radius: 12px;
-            padding: 30px;
+            padding: 24px 32px;
             margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
 
         .section-header {
@@ -51,7 +68,7 @@
         }
 
         .section-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: #1d2129;
         }
@@ -62,40 +79,45 @@
             gap: 24px;
         }
 
-        .doc-item {
-            padding: 20px;
+        .doc-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 16px;
             border-radius: 8px;
-            border: 1px solid #e5e6eb;
             transition: all 0.2s;
         }
 
-        .doc-item:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-            transform: translateY(-2px);
+        .doc-card:hover {
+            background: #f7f8fa;
         }
 
-        .doc-header {
+        .doc-top {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
+            align-items: flex-start;
+            gap: 12px;
         }
 
         .doc-icon {
             font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .doc-content {
+            flex: 1;
+            min-width: 0;
         }
 
         .doc-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: #1d2129;
+            margin-bottom: 4px;
         }
 
         .doc-desc {
-            font-size: 14px;
+            font-size: 13px;
             color: #8f959e;
-            margin-bottom: 16px;
             line-height: 1.5;
         }
 
@@ -103,12 +125,13 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 6px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
+            align-self: flex-start;
         }
 
         .doc-btn:hover {
@@ -120,37 +143,29 @@
         .workflow-section {
             background: white;
             border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
+            padding: 24px 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
 
         .workflow-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
+            margin-top: 20px;
         }
 
         .workflow-item {
             display: flex;
             align-items: flex-start;
-            gap: 16px;
-            padding: 16px;
-            border-radius: 8px;
-            background: #f7f8fa;
-        }
-
-        .workflow-item.completed {
-            background: #e8f5e9;
-        }
-
-        .workflow-item.active {
-            background: #e3f2fd;
-            border: 2px solid #667eea;
+            gap: 12px;
         }
 
         .workflow-icon {
             font-size: 24px;
-            min-width: 32px;
+            flex-shrink: 0;
+            width: 32px;
+            display: flex;
+            align-items: center;
         }
 
         .workflow-content {
@@ -158,58 +173,35 @@
         }
 
         .workflow-name {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 600;
             color: #1d2129;
             margin-bottom: 4px;
         }
 
         .workflow-desc {
-            font-size: 14px;
-            color: #8f959e;
-        }
-
-        .workflow-status {
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .status-completed {
-            background: #4caf50;
-            color: white;
-        }
-
-        .status-active {
-            background: #667eea;
-            color: white;
-        }
-
-        .status-pending {
-            background: #e5e6eb;
+            font-size: 13px;
             color: #8f959e;
         }
 
         /* 响应式 */
         @media (max-width: 1024px) {
+            .overview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
             .docs-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
-            .docs-grid {
+            .overview-grid {
                 grid-template-columns: 1fr;
             }
             
-            .project-overview {
-                flex-wrap: wrap;
-                gap: 20px;
-            }
-            
-            .overview-item {
-                flex: 1 1 calc(50% - 10px);
+            .docs-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -220,102 +212,126 @@
     <!-- 主内容区 -->
     <div class="content-wrapper">
         <!-- 项目状态概览 -->
-        <div class="project-overview">
-            <div class="overview-item">
-                <div class="overview-value">12</div>
-                <div class="overview-label">进行中项目</div>
+        <div class="overview-section">
+            <div class="overview-header">
+                <span style="font-size: 24px;">📊</span>
+                <h2 class="overview-title">项目状态概览</h2>
             </div>
-            <div class="overview-item">
-                <div class="overview-value">5</div>
-                <div class="overview-label">待立项</div>
-            </div>
-            <div class="overview-item">
-                <div class="overview-value">3</div>
-                <div class="overview-label">风险项目</div>
-            </div>
-            <div class="overview-item">
-                <div class="overview-value">28</div>
-                <div class="overview-label">已完成项目</div>
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <div class="overview-label">进行中项目</div>
+                    <div class="overview-value">12</div>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-label">待立项</div>
+                    <div class="overview-value">5</div>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-label">风险项目</div>
+                    <div class="overview-value">3</div>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-label">已完成项目</div>
+                    <div class="overview-value">28</div>
+                </div>
             </div>
         </div>
 
         <!-- 项目部文档 -->
         <div class="docs-section">
             <div class="section-header">
-                <span style="font-size: 28px;">📄</span>
+                <span style="font-size: 24px;">📄</span>
                 <h2 class="section-title">项目部文档</h2>
             </div>
             <div class="docs-grid">
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">📝</span>
-                        <h3 class="doc-name">立项书</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">立项书</h3>
+                            <p class="doc-desc">项目基本信息、目标、资源需求</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">项目基本信息、目标、资源需求</p>
                     <button class="doc-btn" onclick="openDocModal('立项书')">查看模板</button>
                 </div>
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">📊</span>
-                        <h3 class="doc-name">可行性报告</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">可行性报告</h3>
+                            <p class="doc-desc">技术、市场、资源可行性分析</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">技术、市场、资源可行性分析</p>
                     <button class="doc-btn" onclick="openDocModal('可行性报告')">查看模板</button>
                 </div>
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">📋</span>
-                        <h3 class="doc-name">项目章程</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">项目章程</h3>
+                            <p class="doc-desc">项目范围、里程碑、干系人</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">项目范围、里程碑、干系人</p>
                     <button class="doc-btn" onclick="openDocModal('项目章程')">查看模板</button>
                 </div>
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">📅</span>
-                        <h3 class="doc-name">项目计划</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">项目计划</h3>
+                            <p class="doc-desc">详细进度计划、资源分配</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">详细进度计划、资源分配</p>
                     <button class="doc-btn" onclick="openDocModal('项目计划')">查看模板</button>
                 </div>
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">⚠️</span>
-                        <h3 class="doc-name">风险管理</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">风险管理</h3>
+                            <p class="doc-desc">风险识别、评估、应对措施</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">风险识别、评估、应对措施</p>
                     <button class="doc-btn" onclick="openDocModal('风险管理')">查看模板</button>
                 </div>
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">📈</span>
-                        <h3 class="doc-name">进度报告</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">进度报告</h3>
+                            <p class="doc-desc">周报、月报、阶段报告</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">周报、月报、阶段报告</p>
                     <button class="doc-btn" onclick="openDocModal('进度报告')">查看模板</button>
                 </div>
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">✅</span>
-                        <h3 class="doc-name">结项报告</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">结项报告</h3>
+                            <p class="doc-desc">项目总结、成果验收</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">项目总结、成果验收</p>
                     <button class="doc-btn" onclick="openDocModal('结项报告')">查看模板</button>
                 </div>
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">🏆</span>
-                        <h3 class="doc-name">成果报告</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">成果报告</h3>
+                            <p class="doc-desc">项目成果、经验教训</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">项目成果、经验教训</p>
                     <button class="doc-btn" onclick="openDocModal('成果报告')">查看模板</button>
                 </div>
-                <div class="doc-item">
-                    <div class="doc-header">
+                <div class="doc-card">
+                    <div class="doc-top">
                         <span class="doc-icon">🔍</span>
-                        <h3 class="doc-name">评审流程</h3>
+                        <div class="doc-content">
+                            <h3 class="doc-name">评审流程</h3>
+                            <p class="doc-desc">各阶段评审要点、流程</p>
+                        </div>
                     </div>
-                    <p class="doc-desc">各阶段评审要点、流程</p>
                     <button class="doc-btn" onclick="openDocModal('评审流程')">查看模板</button>
                 </div>
             </div>
@@ -324,33 +340,30 @@
         <!-- 项目阶段流程 -->
         <div class="workflow-section">
             <div class="section-header">
-                <span style="font-size: 28px;">🔄</span>
+                <span style="font-size: 24px;">🔄</span>
                 <h2 class="section-title">项目阶段流程</h2>
             </div>
             <div class="workflow-list">
-                <div class="workflow-item completed">
+                <div class="workflow-item">
                     <span class="workflow-icon">✅</span>
                     <div class="workflow-content">
                         <div class="workflow-name">立项</div>
                         <div class="workflow-desc">立项书审批</div>
                     </div>
-                    <span class="workflow-status status-completed">已完成</span>
                 </div>
-                <div class="workflow-item completed">
+                <div class="workflow-item">
                     <span class="workflow-icon">✅</span>
                     <div class="workflow-content">
                         <div class="workflow-name">规划</div>
                         <div class="workflow-desc">项目章程确认</div>
                     </div>
-                    <span class="workflow-status status-completed">已完成</span>
                 </div>
-                <div class="workflow-item active">
+                <div class="workflow-item">
                     <span class="workflow-icon">🔄</span>
                     <div class="workflow-content">
                         <div class="workflow-name">设计</div>
                         <div class="workflow-desc">设计评审通过</div>
                     </div>
-                    <span class="workflow-status status-active">进行中</span>
                 </div>
                 <div class="workflow-item">
                     <span class="workflow-icon">🔧</span>
@@ -358,7 +371,6 @@
                         <div class="workflow-name">EVT</div>
                         <div class="workflow-desc">工程验证</div>
                     </div>
-                    <span class="workflow-status status-pending">待开始</span>
                 </div>
                 <div class="workflow-item">
                     <span class="workflow-icon">🔬</span>
@@ -366,7 +378,6 @@
                         <div class="workflow-name">DVT</div>
                         <div class="workflow-desc">设计验证</div>
                     </div>
-                    <span class="workflow-status status-pending">待开始</span>
                 </div>
                 <div class="workflow-item">
                     <span class="workflow-icon">🏭</span>
@@ -374,7 +385,6 @@
                         <div class="workflow-name">PVT</div>
                         <div class="workflow-desc">生产验证</div>
                     </div>
-                    <span class="workflow-status status-pending">待开始</span>
                 </div>
                 <div class="workflow-item">
                     <span class="workflow-icon">🚀</span>
@@ -382,7 +392,6 @@
                         <div class="workflow-name">MP</div>
                         <div class="workflow-desc">量产</div>
                     </div>
-                    <span class="workflow-status status-pending">待开始</span>
                 </div>
             </div>
         </div>
@@ -530,7 +539,6 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
             
-            // TODO: 调用智能体 API 生成文档并保存到文件管理
             console.log('保存文档:', data);
             alert('文档已保存！\n\n智能体将自动生成文档并归档到文件管理系统。');
             closeDocModal();
