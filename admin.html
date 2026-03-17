@@ -3,92 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理后台 - XC 智能体系统</title>
+    <title>管理后台 - 研发工作流程智能体</title>
+    <link rel="stylesheet" href="css/common.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f6f7;
-            min-height: 100vh;
-        }
-
-        /* 顶部导航栏 */
-        .header {
-            background: #1d2129;
-            color: white;
-            padding: 0 24px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logo {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 8px;
-        }
-
-        .nav-links a {
-            color: rgba(255,255,255,0.85);
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            background: rgba(255,255,255,0.15);
-            color: white;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #0066ff;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        /* 主容器 */
+        /* 管理后台页面特殊样式 */
         .admin-container {
             display: flex;
             max-width: 1600px;
-            margin: 0 auto;
+            margin: 100px auto 0;
             padding: 16px;
             gap: 16px;
         }
@@ -407,25 +329,26 @@
 </head>
 <body>
     <!-- 顶部导航栏 -->
-    <header class="header">
-        <div class="header-left">
-            <div class="logo">⚙️ 管理后台</div>
-            <nav class="nav-links">
-                <a href="index.html">首页</a>
-                <a href="contacts.html">通讯录</a>
-                <a href="token-stats.html">Token 统计</a>
-                <a href="project-agent.html">智能体</a>
-                <a href="admin.html" class="active">管理后台</a>
-            </nav>
-        </div>
-        <div class="header-right">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">🚀 研发工作流程智能体</a>
+            <div class="nav-menu-container">
+                <ul class="nav-menu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="interaction-center.html">交互中心</a></li>
+                    <li><a href="file-manager.html">文件管理</a></li>
+                    <li><a href="token-stats.html">Token 统计</a></li>
+                    <li><a href="contacts.html">通讯录</a></li>
+                    <li><a href="admin.html" class="active">管理后台</a></li>
+                </ul>
+            </div>
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">A</div>
                 <span id="userName">管理员</span>
             </div>
-            <button onclick="logout()" style="background:none;border:none;color:white;cursor:pointer;">退出</button>
         </div>
-    </header>
+    </nav>
 
     <!-- 主容器 -->
     <div class="admin-container">
