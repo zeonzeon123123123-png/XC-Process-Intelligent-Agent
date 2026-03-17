@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>快速登录测试</title>
+</head>
+<body>
+    <h1>快速登录为管理员</h1>
+    <button onclick="loginAsAdmin()">登录为管理员（张三）</button>
+    <button onclick="loginAsUser()">登录为普通用户（李四）</button>
+    <button onclick="clearLogin()">清除登录</button>
+    
+    <script>
+        function loginAsAdmin() {
+            const adminUser = {
+                userId: 'USR-2026-010',
+                name: '张三',
+                email: 'admin@company.com',
+                role: 'admin',
+                department: '管理层',
+                position: '系统管理员'
+            };
+            localStorage.setItem('currentUser', JSON.stringify(adminUser));
+            alert('已登录为管理员：张三\n\n现在可以访问所有页面查看数据！');
+            window.location.href = 'index.html';
+        }
+        
+        function loginAsUser() {
+            const user = {
+                userId: 'USR-2026-001',
+                name: '李四',
+                email: 'lisi@company.com',
+                role: 'employee',
+                department: '产品部',
+                position: '产品经理'
+            };
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            alert('已登录为：李四');
+            window.location.href = 'index.html';
+        }
+        
+        function clearLogin() {
+            localStorage.removeItem('currentUser');
+            alert('已清除登录状态');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
